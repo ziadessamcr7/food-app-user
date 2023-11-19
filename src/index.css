@@ -1,0 +1,16 @@
+.auth-container {
+    background-image: url('./assets/imgs/bg-auth.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+.auth-container .login {
+    height: 100vh;
+}
+
+.overlay {
+    background: linear-gradient(51deg, rgba(47, 140, 51, 0.63) -22.39%, rgba(0, 0, 0, 0.62) 61.76%);
+
+}
