@@ -42,7 +42,7 @@ function App() {
       errorElement: <NotFound />,
       children: [
         { path: '', element: <Login /> },
-        { path: 'login', element: <Login /> },
+        { path: 'food-app-login', element: <Login /> },
         { path: 'forget-pass', element: <ForgetPassword /> },
         { path: 'reset-pass', element: <ResetPassword /> },
 

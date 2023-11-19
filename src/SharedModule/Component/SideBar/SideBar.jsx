@@ -10,7 +10,7 @@ export default function SideBar() {
         if (localStorage.getItem('adminToken') !== null) {
             localStorage.removeItem('adminToken')
 
-            nav('/login')
+            nav('/food-app-login')
         }
     }
 
