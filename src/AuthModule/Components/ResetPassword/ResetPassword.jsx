@@ -28,7 +28,7 @@ export default function ResetPassword() {
                 toast(response.data.message)
                 console.log(response);
                 setTimeout(() => {
-                    nav('/login')
+                    nav('/food-app-login')
                 }, 5500);
 
 
