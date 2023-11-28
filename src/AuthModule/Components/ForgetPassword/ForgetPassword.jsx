@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import myImg from '../../../assets/imgs/4 3.png'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -6,11 +6,14 @@ import axios from 'axios'
 
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { Oval } from 'react-loader-spinner'
 
 
 export default function ForgetPassword() {
 
     const nav = useNavigate()
+    const [loading, setloading] = useState(false)
+
 
     const {
         register,
@@ -22,7 +25,9 @@ export default function ForgetPassword() {
     const onSubmit = (data) => {
         console.log(data)
 
-        axios.post('http://upskilling-egypt.com:3002/api/v1/Users/Reset/Request', data)
+        setloading(true)
+
+        axios.post('https://upskilling-egypt.com:443/api/v1/Users/Reset/Request', data)
             .then(function (response) {
                 toast(response.data.message)
                 console.log(response);
@@ -52,21 +57,43 @@ export default function ForgetPassword() {
                         <p className='text-muted'>Please Enter Your E-mail and Check Your Inbox</p>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <input type="email"
-                                name="email"
-                                id="email"
-                                placeholder='Enter your e-mail'
-                                className='form-control mx-auto mt-4'
-                                {...register('email', {
-                                    required: true,
-                                    pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
-                                })} />
+                            <div className='bg-ino box d-flex align-items-center mt-4 p1 rounded-2'>
+                                <div className='icon p-2'>
+                                    <i className="fa fa-envelope"></i>
+                                </div>
+                                <input type="email"
+                                    name="email"
+                                    id="email"
+                                    placeholder='Enter your e-mail'
+                                    className='form-control mx-auto'
+                                    {...register('email', {
+                                        required: true,
+                                        pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+                                    })} />
+                            </div>
+
                             {errors.email && errors.email.type === 'required' &&
                                 <span className='text-danger'>Email is required</span>}
                             {errors.email && errors.email.type === 'pattern' &&
                                 <span className='text-danger'>Enter a valid email</span>}
 
-                            <button className='btn btn-success w-100 mt-4 fw-bolder'>Send</button>
+                            <button className='btn btn-success d-flex justify-content-center w-100 mt-4 fw-bolder'>
+                                {loading === true ? <Oval
+                                    height={27}
+                                    width={27}
+                                    color="#fff"
+                                    wrapperStyle={{}}
+                                    wrapperClass=""
+                                    visible={true}
+                                    ariaLabel='oval-loading'
+                                    secondaryColor="#4fa94d"
+                                    strokeWidth={3}
+                                    strokeWidthSecondary={3}
+
+                                /> : 'Login'}
+
+
+                            </button>
 
                         </form>
 

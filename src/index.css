@@ -12,5 +12,58 @@
 
 .overlay {
     background: linear-gradient(51deg, rgba(47, 140, 51, 0.63) -22.39%, rgba(0, 0, 0, 0.62) 61.76%);
+}
 
+
+.ps-sidebar-container .ps-menu-button:hover {
+    background-color: rgba(0, 128, 0, 0.438) !important;
+}
+
+.side-bar {
+    position: fixed !important;
+    top: 0;
+    bottom: 0;
+    z-index: 5555555;
+
+
+}
+
+.box {
+    position: relative;
+    background-color: #F7F7F7;
+}
+
+.box input {
+    background-color: #F7F7F7 !important;
+}
+
+.icon {
+    border-right: 1px;
+}
+
+.Mylogo {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.header-container {
+    background-image: url('../src/assets/imgs/Header1.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: red;
+}
+
+.table-head {
+    /* background-color: red !important; */
+}
+
+.t-h {
+    background-color: rgb(211, 211, 211) !important;
+}
+
+.recipe-img {
+    width: 55px;
+    height: 55px;
 }
