@@ -10,13 +10,16 @@ export default function Home() {
             <Header >
                 <div className='header-container rounded-4 text-white mt-4'>
                     <div className="row align-items-center">
-                        <div className="col-md-9">
+                        <div className="col-sm-9">
                             <div className='p-3'>
                                 <h1>Welcome <span className='fw-lighter'>Upskilling!</span> </h1>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, <br></br> necessitatibus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, officia! </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos,
+                                    <br></br> necessitatibus. Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Rem, officia!
+                                </p>
                             </div>
                         </div>
-                        <div className="col-md-3">
+                        <div className="col-sm-3">
                             <div>
                                 <img src={headerPic} className='w-100' alt="header-pic" />
                             </div>
@@ -28,7 +31,7 @@ export default function Home() {
 
             </Header>
 
-            <div className='list-container rounded-4 bg-success-subtle mt-3'>
+            <div className='rounded-4 bg-success-subtle mt-3'>
                 <div className="row align-items-center p-3">
                     <div className='col-md-9'>
                         <h3>Fill The <span className='text-success'>Recipes</span> !</h3>
@@ -41,11 +44,6 @@ export default function Home() {
             </div>
 
         </section>
-
-
-
-
-
 
     )
 }

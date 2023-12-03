@@ -7,14 +7,12 @@ import Header from '../Header/Header';
 export default function MasterLayout({ adminData }) {
     return (
         <div className='container-fluid'>
-            <div className="row">
-                <div className="col-md-2">
-                    <div className=''>
-                        <SideBar />
-                    </div>
+            <div className="d-flex bg-dangr">
+                <div className="bg-kohly">
+                    <SideBar />
                 </div>
-                <div className="col-md-10">
-                    <div className='bg'>
+                <div className="w-100">
+                    <div className=''>
                         <Navbar adminData={adminData} />
                         <Outlet />
                     </div>

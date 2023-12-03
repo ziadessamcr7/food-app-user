@@ -16,12 +16,12 @@ export default function CategoriesList() {
 
     const [categoryList, setCategoryList] = useState(null)
 
-    // const [show, setShow] = useState(false);
-
-    // const handleShow = () => setShow(true);
-
     const [categoryId, setCategoryId] = useState(0)
     const [modaleState, setModalState] = useState('close')
+
+    const [pagesArray, setPagesArray] = useState([])
+
+    const [searchString, setSearchString] = useState('')
 
     const showAddCategoryModal = () => {
         setModalState('modal-add')
@@ -74,21 +74,32 @@ export default function CategoriesList() {
         })
     }
 
-    const getCategoriesList = () => {
-        axios.get('https://upskilling-egypt.com:443/api/v1/Category/?pageSize=20&pageNumber=1', {
-            headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+    const getCategoriesList = (pageNum, searchName) => {
+        axios.get('https://upskilling-egypt.com:443/api/v1/Category/', {
+            headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
+            params: {
+                pageSize: 5,
+                pageNumber: pageNum,
+                name: searchName
+            }
         }).then((response) => {
-            console.log(response)
             setCategoryList(response.data.data)
+            setPagesArray(Array(response.data.totalNumberOfPages).fill().map((_, i) => i + 1))
         }).catch((error) => {
             console.log(error);
         })
     }
 
+    const searchByName = (e) => {
+
+        console.log(e.target.value);
+        setSearchString(e.target.value)
+        getCategoriesList(1, e.target.value)
+    }
 
 
     useEffect(() => {
-        getCategoriesList()
+        getCategoriesList(1)
     }, [])
 
     const deleteCategory = () => {
@@ -223,15 +234,17 @@ export default function CategoriesList() {
 
             <div className='categories-list mt-3'>
                 <div className="row justify-content-between align-items-center">
-                    <div className="col-md-7">
+                    <div className="col-sm-7">
                         <h3>Categories Table Details</h3>
                         <p>You can check all details</p>
                     </div>
-                    <div className="col-md-5 text-end">
+                    <div className="col-sm-5 text-end">
                         <button onClick={showAddCategoryModal} className='btn btn-success ps-4'>Add New Category</button>
                     </div>
 
-                    <table class="table text-center">
+                    <input onChange={searchByName} type="text" className='form-control w-50 mb-2' placeholder='search by name' />
+
+                    {categoryList?.length == 0 ? <NoData /> : <> <div className='table-responsive' ><table class="table text-center table-striped ">
                         <thead className='table-head'>
                             <tr className='' >
                                 <th className='t-h py-3 rounded-start-4' scope="col">#</th>
@@ -239,25 +252,22 @@ export default function CategoriesList() {
                                 <th className='t-h py-3 rounded-end-4' scope="col">ACTION</th>
                             </tr>
                         </thead>
-                        {categoryList ? <>{
-                            categoryList?.length < 0 ? <tbody className='text-center'>
-                                <NoData /> </tbody> :
-                                <tbody className=''>
-                                    {categoryList?.map((category, idx) => {
-                                        return <tr>
-                                            <td scope="row"> {idx + 1} </td>
-                                            <td> {category.name} </td>
-                                            <td>
-                                                <i title='delete' onClick={() => { showDeleteCategoryModal(category.id) }}
-                                                    className='fa fa-trash text-danger' style={{ cursor: 'pointer' }} ></i>
-                                                <i title='edit' onClick={() => { showUpdateCategoryModal(category) }}
-                                                    className='fa fa-edit ms-4 text-warning' style={{ cursor: 'pointer' }} ></i>
-                                            </td>
-                                        </tr>
-                                    }
-
-                                    )}
-                                </tbody>
+                        {categoryList ? <> {
+                            <tbody className=''>
+                                {categoryList?.map((category, idx) => {
+                                    return <tr key={idx}>
+                                        <td scope="row"> {idx + 1} </td>
+                                        <td> {category.name} </td>
+                                        <td>
+                                            <i title='delete' onClick={() => { showDeleteCategoryModal(category.id) }}
+                                                className='fa fa-trash text-danger' style={{ cursor: 'pointer' }} ></i>
+                                            <i title='edit' onClick={() => { showUpdateCategoryModal(category) }}
+                                                className='fa fa-edit ms-4 text-warning' style={{ cursor: 'pointer' }} ></i>
+                                        </td>
+                                    </tr>
+                                }
+                                )}
+                            </tbody>
                         } </> : <h2
                             className='d-flex justify-content-center align-items-center'>
                             <Oval
@@ -273,8 +283,19 @@ export default function CategoriesList() {
                                 strokeWidthSecondary={5}
 
                             /></h2>}
-
                     </table>
+                    </div>
+                        <nav aria-label="...">
+                            <ul class="pagination pagination-sm">
+                                {console.log(pagesArray)}
+                                {pagesArray?.map((pageNo, idx) => {
+                                    return <li onClick={() => { getCategoriesList(pageNo, searchString) }} key={idx} class="page-item " aria-current="page">
+                                        <span className="page-link active" style={{ cursor: "pointer" }}> {pageNo} </span>
+                                    </li>
+                                })}
+                            </ul>
+                        </nav></>}
+
                 </div>
             </div>
 

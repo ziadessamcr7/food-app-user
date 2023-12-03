@@ -34,8 +34,6 @@ export default function ForgetPassword() {
 
                 nav('/reset-pass')
 
-
-
             })
             .catch(function (error) {
                 console.log(error.response.data.message);

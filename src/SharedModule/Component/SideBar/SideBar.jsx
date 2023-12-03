@@ -29,8 +29,10 @@ export default function SideBar() {
     }
 
     return (
-        <div>
-            <Sidebar collapsed={isCollapsed} backgroundColor='#1F263E' className='text-white side-bar'>
+        <div className='side-bar'>
+            <Sidebar collapsed={isCollapsed}
+                backgroundColor='rgba(31, 38, 62, 0.7)'
+                className='text-white'>
                 <Menu >
 
                     <Modal show={show} onHide={handleClose}>

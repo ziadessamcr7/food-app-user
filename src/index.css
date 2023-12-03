@@ -20,12 +20,21 @@
 }
 
 .side-bar {
-    position: fixed !important;
+    /* position: fixed !important;
     top: 0;
-    bottom: 0;
-    z-index: 5555555;
+    bottom: 0; */
+    /* z-index: 555555555555; */
+    background-color: rgba(31, 38, 62, 0.5);
+    padding-right: 5px;
+    /* position: fixed; */
+    /* top: 0; */
+
+}
 
 
+.bg-kohly {
+    margin-right: 20px;
+    background-color: rgba(31, 38, 62, 1);
 }
 
 .box {
@@ -52,7 +61,6 @@
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    background-color: red;
 }
 
 .table-head {
@@ -66,4 +74,29 @@
 .recipe-img {
     width: 55px;
     height: 55px;
+}
+
+.noUser-img {
+    width: 85px;
+    height: 85px;
+}
+
+.active>.page-link,
+.page-link.active {
+    background-color: rgb(28, 92, 28);
+    border-color: white;
+}
+
+.active>.page-link,
+.page-link.active:hover {
+    background-color: black;
+}
+
+/* body {
+    background-color: darkgoldenrod;
+} */
+
+.container-fluid {
+    padding-left: 0 !important;
+    /* padding-right: 0 !important; */
 }
