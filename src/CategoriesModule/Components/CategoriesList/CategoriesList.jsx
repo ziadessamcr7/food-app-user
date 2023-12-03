@@ -239,7 +239,7 @@ export default function CategoriesList() {
                         <p>You can check all details</p>
                     </div>
                     <div className="col-sm-5 text-end">
-                        <button onClick={showAddCategoryModal} className='btn btn-success ps-4'>Add New Category</button>
+                        <button onClick={showAddCategoryModal} className='btn btn-success ps-3'>Add New Category</button>
                     </div>
 
                     <input onChange={searchByName} type="text" className='form-control w-50 mb-2' placeholder='search by name' />
