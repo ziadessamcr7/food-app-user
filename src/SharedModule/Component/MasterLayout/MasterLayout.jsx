@@ -7,12 +7,10 @@ import Header from '../Header/Header';
 export default function MasterLayout({ adminData }) {
     return (
         <div className='container-fluid'>
-            <div className="d-flex bg-danger-su">
+            <div className="d-flex ">
                 <div className="bg-kohly">
                     <SideBar />
                 </div>
-
-
                 <div className="w-100">
                     <div>
                         <div className=' content-container ps-3 position-relative'>
