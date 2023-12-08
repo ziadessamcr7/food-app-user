@@ -1,35 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import myImg from '../../../assets/imgs/4 3.png'
 import { Link, useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
 export default function ResetPassword() {
 
+    const [loading, setLoading] = useState(false)
 
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
+        watch
 
     } = useForm()
 
     const nav = useNavigate()
 
+    const password = watch("password")
+
 
     const onSubmit = (data) => {
         console.log(data)
-
+        setLoading(true)
         axios.post('https://upskilling-egypt.com:443/api/v1/Users/Reset', data)
             .then(function (response) {
-                toast(response.data.message)
+                toast.success(response.data.message)
                 console.log(response);
                 setTimeout(() => {
-                    nav('/food-app-login')
-                }, 5500);
+                    nav('/food-app-admin')
+                }, 4000);
+                setLoading(false)
 
 
 
@@ -37,6 +42,7 @@ export default function ResetPassword() {
             .catch(function (error) {
                 console.log(error.response.data.message);
                 toast(error.response.data.message)
+                setLoading(false)
             })
 
     }
@@ -57,8 +63,6 @@ export default function ResetPassword() {
                         <form onSubmit={handleSubmit(onSubmit)}>
 
                             <input type="email"
-                                name="email"
-                                id="email"
                                 placeholder='E-mail'
                                 className='form-control mx-auto'
                                 {...register('email', {
@@ -71,36 +75,41 @@ export default function ResetPassword() {
                                 <span className='text-danger'>Enter a valid email</span>}
 
                             <input type="text"
-                                name='otp'
                                 id='otp'
                                 placeholder='OTP'
-                                className='form-control mx-auto mt-4'
+                                className='form-control mx-auto mt-3'
 
                                 {...register('seed', {
                                     required: true,
                                 })} />
+                            {errors.seed && <span className='text-danger' >OTP is required</span>}
 
                             <input type="password"
-                                name="password"
-                                id="password"
                                 placeholder='New Password'
-                                className='form-control mx-auto my-4'
+                                className='form-control mx-auto mt-3'
                                 {...register('password', {
-                                    required: true,
+                                    required: "password required",
+                                    pattern: /^[A-Za-z\d@$!%*#?&]{6,15}$/
                                 })} />
-                            {errors.password && errors.password.type === 'required' &&
-                                <span className='text-danger'>Password is required</span>}
+                            {errors.password &&
+                                <span className='text-danger'> {errors.password.message} </span>}
+                            {errors.password && errors.password.type == 'pattern' &&
+                                <span className='text-danger'> enter a vlaid password </span>}
 
                             <input type="password"
-                                name='confirmPassword'
-                                id='confirmPassword'
                                 placeholder='Confirm New Password'
-                                className='form-control mx-auto'
+                                className='form-control mx-auto mt-3'
                                 {...register('confirmPassword', {
                                     required: true,
+                                    validate: (value) =>
+                                        value === password || "The passwords do not match"
                                 })} />
+                            {errors.confirmPassword && <span className='text-danger'> {errors.confirmPassword.message} </span>}
 
-                            <button className='btn btn-success w-100 mt-4 fw-bolder'>Reset Password</button>
+                            <button className='btn btn-success w-100 mt-4 fw-bolder'>
+                                {loading ? <i className='fa-solid fa-spin fa-spinner'></i> : 'Reset Password'}
+
+                            </button>
 
                         </form>
 

@@ -6,18 +6,35 @@ import { useState } from 'react'
 import axios from 'axios'
 import { useEffect } from 'react'
 
-import NoDataImg from '../../../assets/imgs/freepik--Character--inject-70.png'
+import avatar from '../../../assets/imgs/Avatar_icon_green.svg.jpg'
 import NoData from '../../../SharedModule/Component/NoData/NoData'
+import { Modal } from 'react-bootstrap'
+import NoDataImg from '../../../assets/imgs/freepik--Character--inject-70.png'
+import { toast } from 'react-toastify'
+
 
 
 export default function UsersList() {
 
+    const [loading, setLoading] = useState(false)  //loader
+
+    const [userId, setUserId] = useState(null)
 
     const [usersList, setUsersList] = useState(null)
 
     const [pagesArray, setPagesArray] = useState([])
 
     const [searchString, setSearchString] = useState('')
+
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+
+    const handleShow = (id) => {
+        setUserId(id)
+        setShow(true);
+    }
 
 
 
@@ -38,7 +55,27 @@ export default function UsersList() {
         }).catch((error) => {
             console.log(error)
         })
+    }
 
+    const deleteUser = () => {
+        setLoading(true)
+        axios.delete(`https://upskilling-egypt.com:443/api/v1/Users/${userId}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+        }).then((response) => {
+            console.log(response)
+            setLoading(false)
+            handleClose()
+            getAllUsers()
+            toast.success(response.data.message, {
+                autoClose: 2000
+            })
+        }).catch((error) => {
+            console.log(error)
+            setLoading(false)
+            toast.error(error.response.data.message, {
+                autoClose: 2000
+            })
+        })
     }
 
     const searchByName = (e) => {
@@ -58,16 +95,34 @@ export default function UsersList() {
 
     return (
         <div>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete User</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className='text-center'>
+                        <img src={NoDataImg} alt="no-data" />
+                        <h4>Delete this user?</h4>
+                        <p className='text-muted'>are you sure you want to delete this user ? if you are sure just click on delete it</p>
+                        <button onClick={deleteUser}
+                            className='btn btn-outline-danger px-4 ms-auto d-block '>
+                            {loading ? <i class="fa-solid fa-spin fa-spinner px-3"></i> : 'Delete'}
+                        </button>
+                    </div>
+                </Modal.Body>
+            </Modal>
+
             <Header>
-                <div className='header-container rounded-4 text-white mt-4'>
+                <div className='header-container rounded-4 text-white' style={{ marginTop: '70px' }}>
                     <div className="row align-items-center">
-                        <div className="col-md-10">
+                        <div className="col-sm-10">
                             <div className='p-3'>
-                                <h1>Welcome Usersss!</h1>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, necessitatibus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, officia! </p>
+                                <h1>Users List</h1>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, necessitatibus. Lorem ipsum <br /> dolor sit amet consectetur adipisicing elit. Rem, officia! </p>
                             </div>
                         </div>
-                        <div className="col-md-2">
+                        <div className="col-sm-2">
                             <div>
                                 <img src={Mypic} className='w-100' alt="header-pic" />
                             </div>
@@ -82,10 +137,10 @@ export default function UsersList() {
 
 
             <div className="row my-3">
-                <div className="col-md-6">
-                    <input onChange={searchByName} type="text" className='form-control' placeholder='search by name' />
+                <div className="col-sm-6">
+                    <input onChange={searchByName} type="text" className='name-search-recipe form-control' placeholder='search by name' />
                 </div>
-                <div className="col-md-6">
+                <div className="col-sm-6">
                     <input type="email" className='form-control' onChange={searchByMail} placeholder='search by email' />
                 </div>
             </div>
@@ -101,6 +156,7 @@ export default function UsersList() {
                         <th className='t-h py-3' scope="col">Name</th>
                         <th className='t-h py-3' scope="col">Image</th>
                         <th className='t-h py-3' scope="col">Phone</th>
+                        <th className='t-h py-3' scope="col">Role</th>
                         <th className='t-h py-3' scope="col">Email</th>
                         <th className='t-h py-3 rounded-end-4' scope="col">Actions</th>
 
@@ -113,18 +169,20 @@ export default function UsersList() {
                             <td> {user.userName} </td>
                             {user.imagePath ? <td>
                                 {<img src={`https://upskilling-egypt.com:443/` + user.imagePath} className='recipe-img' alt="" />}
-                            </td> : <td> <img src={NoDataImg} className='noUser-img' alt="" /> </td>}
+                            </td> : <td> <img src={avatar} className='noUser-img' alt="" /> </td>}
                             <td> {user.phoneNumber} </td>
+                            <td> {user.group.name} </td>
                             <td> {user.email} </td>
                             <td>
                                 <i title='delete'
                                     className='fa fa-trash text-danger'
-                                    style={{ cursor: 'pointer' }} >
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => { handleShow(user.id) }}>
                                 </i>
                             </td>
                         </tr>
 
-                    })} </> : <h2
+                    })} </> : <span
                         className='d-flex justify-content-center align-items-center'>
                         <Oval
                             height={60}
@@ -138,23 +196,20 @@ export default function UsersList() {
                             strokeWidth={5}
                             strokeWidthSecondary={5}
 
-                        /></h2>}
+                        /></span>}
                 </tbody>
             </table>
             </div>
                 <nav aria-label="...">
-                    <ul class="pagination pagination-sm">
+                    <ul class="pagination pagination-sm d-flex justify-content-end">
                         {console.log(pagesArray)}
                         {pagesArray?.map((pageNo, idx) => {
                             return <li onClick={() => { getAllUsers(pageNo, searchString) }} key={idx} class="page-item " aria-current="page">
-                                <span className="page-link active" style={{ cursor: "pointer" }}> {pageNo} </span>
+                                <span id='page' className="page-link active" style={{ cursor: "pointer" }}> {pageNo} </span>
                             </li>
                         })}
                     </ul>
                 </nav></>}
-
-
-
         </div>
 
 

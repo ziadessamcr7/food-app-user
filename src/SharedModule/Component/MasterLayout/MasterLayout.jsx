@@ -7,14 +7,23 @@ import Header from '../Header/Header';
 export default function MasterLayout({ adminData }) {
     return (
         <div className='container-fluid'>
-            <div className="d-flex bg-dangr">
+            <div className="d-flex bg-danger-su">
                 <div className="bg-kohly">
                     <SideBar />
                 </div>
+
+
                 <div className="w-100">
-                    <div className=''>
-                        <Navbar adminData={adminData} />
-                        <Outlet />
+                    <div>
+                        <div className=' content-container ps-3 position-relative'>
+                            <Navbar adminData={adminData} />
+                            <div className="fake-nav">
+
+                            </div>
+
+                            <Outlet />
+                        </div>
+
                     </div>
                 </div>
             </div>

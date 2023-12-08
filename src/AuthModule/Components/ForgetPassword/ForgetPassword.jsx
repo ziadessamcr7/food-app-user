@@ -3,10 +3,8 @@ import myImg from '../../../assets/imgs/4 3.png'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
-
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import { Oval } from 'react-loader-spinner'
 
 
 export default function ForgetPassword() {
@@ -29,7 +27,7 @@ export default function ForgetPassword() {
 
         axios.post('https://upskilling-egypt.com:443/api/v1/Users/Reset/Request', data)
             .then(function (response) {
-                toast(response.data.message)
+                toast.success(response.data.message)
                 console.log(response);
 
                 nav('/reset-pass')
@@ -76,19 +74,8 @@ export default function ForgetPassword() {
                                 <span className='text-danger'>Enter a valid email</span>}
 
                             <button className='btn btn-success d-flex justify-content-center w-100 mt-4 fw-bolder'>
-                                {loading === true ? <Oval
-                                    height={27}
-                                    width={27}
-                                    color="#fff"
-                                    wrapperStyle={{}}
-                                    wrapperClass=""
-                                    visible={true}
-                                    ariaLabel='oval-loading'
-                                    secondaryColor="#4fa94d"
-                                    strokeWidth={3}
-                                    strokeWidthSecondary={3}
-
-                                /> : 'Login'}
+                                {loading === true ? <i className='fa-solid fa-spin fa-spinner py-1'></i>
+                                    : 'Login'}
 
 
                             </button>

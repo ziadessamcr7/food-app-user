@@ -11,6 +11,8 @@ import { Oval } from 'react-loader-spinner'
 
 export default function Login({ saveAdminData }) {
 
+
+
     const nav = useNavigate()
 
     const [loading, setloading] = useState(false)
@@ -20,13 +22,18 @@ export default function Login({ saveAdminData }) {
     }
 
 
-
     const {
         register,
         handleSubmit,
         formState: { errors }
 
     } = useForm()
+
+    if (localStorage.getItem('adminToken') !== null) {
+        setTimeout(() => {
+            nav('/dashboard')
+        }, 100);
+    }
 
     const onSubmit = (data) => {
         console.log(data)
@@ -35,7 +42,9 @@ export default function Login({ saveAdminData }) {
 
         axios.post('https://upskilling-egypt.com:443/api/v1/Users/Login', data)
             .then(function (response) {
-                toast('Login success')
+                toast.success('Login success', {
+                    autoClose: 2000
+                })
                 console.log(response.data.token);
                 nav('/dashboard')
 
@@ -44,14 +53,12 @@ export default function Login({ saveAdminData }) {
             })
             .catch(function (error) {
                 console.log('errorrr', error.response.data.message);
-                toast(error.response.data.message)
+                toast.error(error.response.data.message)
                 setloading(false)
             })
-
-
     }
 
-    console.log(errors)
+
 
     return (
         <div className="auth-container container-fluid">
@@ -102,7 +109,7 @@ export default function Login({ saveAdminData }) {
                             {errors.password && errors.password.type === 'required' &&
                                 <span className='text-danger'>Password is required</span>}
                             <div className='d-flex justify-content-between w-100'>
-                                <span className="fw-small">Register Now?</span>
+                                <span className="fw-medium">Register Now?</span>
                                 <Link to={'/forget-pass'} className='text-success' style={{ cursor: 'pointer' }} >Forgot Password?</Link>
                             </div>
                             <button className='btn btn-success d-flex justify-content-center w-100 mt-4 fw-bolder'>

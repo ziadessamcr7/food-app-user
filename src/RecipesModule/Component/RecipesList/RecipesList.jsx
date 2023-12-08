@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { set, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import NoDataImg from '../../../assets/imgs/freepik--Character--inject-70.png'
+import noImg from '../../../assets/imgs/noImg.png'
 import { Oval } from 'react-loader-spinner';
 import NoData from '../../../SharedModule/Component/NoData/NoData';
 
@@ -30,6 +31,11 @@ export default function RecipesList() {
 
     const [searchString, setSearchString] = useState('') //3shan el pagination ama ados 3ala ay page yfdl 3amel search
 
+    const [searchTag, setSearchTag] = useState(null)
+
+    const [searchCat, setSearchCat] = useState(null)
+
+
 
 
 
@@ -49,6 +55,7 @@ export default function RecipesList() {
         setModalState('modal-del');
     }
     const ShowUpdateRecipeModal = (recipe) => {
+        console.log(recipe);
 
         setRecipeId(recipe.id)
         setRecipeObj(recipe)
@@ -115,13 +122,15 @@ export default function RecipesList() {
         })
     }
 
-    const getRecipesList = (pageNum, searchName) => {
+    const getRecipesList = (pageNum, searchName, tagId, catId) => {
         axios.get('https://upskilling-egypt.com:443/api/v1/Recipe/?', {
             headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
             params: {
                 pageSize: 4,
                 pageNumber: pageNum,
-                name: searchName
+                name: searchName,
+                tagId: tagId,
+                categoryId: catId
             }
         }).then((response) => {
             console.log(response)
@@ -175,6 +184,19 @@ export default function RecipesList() {
     const searchByName = (e) => {
         getRecipesList(1, e.target.value)
         setSearchString(e.target.value)
+    }
+
+    const searchByTag = (e) => {
+        console.log(e.target.value)
+        getRecipesList(1, null, e.target.value, searchCat)
+        setSearchTag(e.target.value)
+
+    }
+    const searchByCategory = (e) => {
+        console.log(e.target.value)
+        getRecipesList(1, null, searchTag, e.target.value)
+        setSearchCat(e.target.value)
+
     }
 
 
@@ -267,7 +289,7 @@ export default function RecipesList() {
                             id=""
                             placeholder='Description'
                             cols="60" rows="5"
-                            className='d-block mt-3' {...register('description', {
+                            className='d-block mt-3 form-control' {...register('description', {
                                 required: true
                             })} >
                         </textarea>
@@ -342,6 +364,8 @@ export default function RecipesList() {
 
                         <label className='fw-bold ms-1 mt-2' htmlFor="recipeImage">recipeImage:</label>
                         <input type="file" className='form-control' {...register('recipeImage')} />
+
+
                         <img src={`https://upskilling-egypt.com:443/` + recipeObj?.imagePath}
                             className='recipe-img d-block m-auto' alt="no-img" />
 
@@ -350,7 +374,7 @@ export default function RecipesList() {
                         <textarea name=""
                             id="description"
                             cols="60" rows="5"
-                            className='d-block' {...register('description', {
+                            className='d-block form-control' {...register('description', {
                                 required: true
                             })} >
                         </textarea>
@@ -368,12 +392,12 @@ export default function RecipesList() {
 
 
             <Header>
-                <div className='header-container rounded-4 text-white mt-4'>
+                <div className='header-container rounded-4 text-white' style={{ marginTop: '70px' }}>
                     <div className="row align-items-center">
                         <div className="col-sm-10">
                             <div className='p-3'>
                                 <h1>Recipes Items</h1>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, necessitatibus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, officia! </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, necessitatibus. Lorem ipsum <br /> dolor sit amet  consectetur adipisicing  elit. Rem, officia! </p>
                             </div>
                         </div>
                         <div className="col-sm-2">
@@ -386,22 +410,43 @@ export default function RecipesList() {
                 </div>
             </Header>
 
-            <div className='d-flex justify-content-between my-3'>
-                <div>
+            <div className='row justify-content-between my-3'>
+                <div className='col-sm-8'>
                     <h3>Recipe Table Details</h3>
-                    <span>You can check all details</span>
+                    <span>You can check all details and search all recipes</span>
                 </div>
-                <div>
+                <div className='col-sm-4 text-end'>
                     <button onClick={() => { ShowAddRecipeModal() }} className='btn btn-success px-4'>Add New Item</button>
                 </div>
             </div>
 
-            <input onChange={searchByName} type="text" className='form-control mb-2' placeholder='search by name' />
+
+            <div className="row">
+                <div className="col-sm-4">
+                    <input onChange={searchByName} type="text" className='form-control mb-2' placeholder='search by name' />
+                </div>
+                <div className="col-sm-4">
+                    <select onChange={searchByTag} className='form-select'>
+                        <option selected>search by tag</option>
+                        {tagList?.map((tag) => { return <> <option selected value={tag.id}> {tag.name} </option> </> })}
+
+                    </select>
+                </div>
+                <div className="col-sm-4">
+                    <select onChange={searchByCategory} className='form-select'>
+                        <option selected >search by category</option>
+                        {categoryList?.map((cat) => { return <> <option selected value={cat.id}> {cat.name} </option> </> })}
+                    </select>
+                </div>
+            </div>
+
+
+
 
             {recipeList?.length == 0 ? <NoData /> : <> <div className='table-responsive'> <table class="table table-striped align-middle text-center ">
                 <thead>
                     <tr className=''>
-                        <th className='t-h py-3 rounded-start-4 ' scope="col">#</th>
+                        <th className='t-h py-3 rounded-start-4' scope="col">#</th>
                         <th className='t-h py-3' scope="col">Name</th>
                         <th className='t-h py-3' scope="col">Image</th>
                         <th className='t-h py-3' scope="col">Price</th>
@@ -418,7 +463,7 @@ export default function RecipesList() {
                             <td >{recipe.name}</td>
                             {recipe.imagePath ? <td>
                                 <img src={'https://upskilling-egypt.com:443/' + recipe.imagePath} className='recipe-img' alt="" /> </td>
-                                : <td> <img src={NoDataImg} className='recipe-img' alt="" /> </td>}
+                                : <td> <img src={noImg} className='recipe-img' alt="" /> </td>}
 
                             <td>{recipe.price} L.E </td>
                             <td>{recipe.description}</td>
@@ -436,7 +481,7 @@ export default function RecipesList() {
                         </tr>
 
 
-                    })} </> : <h2
+                    })} </> : <p
                         className='d-flex justify-content-center align-items-center'>
                         <Oval
                             height={60}
@@ -449,15 +494,15 @@ export default function RecipesList() {
                             secondaryColor="#4fa94d"
                             strokeWidth={5}
                             strokeWidthSecondary={5}
-                        /></h2>}
+                        /></p>}
                 </tbody>
             </table>
             </div>
                 <nav aria-label="...">
-                    <ul class="pagination pagination-sm">
+                    <ul class="pagination pagination-sm d-flex justify-content-end">
                         {console.log(pagesArray)}
                         {pagesArray?.map((pageNo, idx) => {
-                            return <li onClick={() => { getRecipesList(pageNo, searchString) }} key={idx} class="page-item " aria-current="page">
+                            return <li onClick={() => { getRecipesList(pageNo, searchString, searchTag, searchCat) }} key={idx} class="page-item " aria-current="page">
                                 <span className="page-link active" style={{ cursor: "pointer" }}> {pageNo} </span>
                             </li>
                         })}

@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom'
 
 export default function Home() {
     return (
-        <section>
+        <section className='vh-100 overflow-hidden'>
             <Header >
-                <div className='header-container rounded-4 text-white mt-4'>
+                <div className='header-container rounded-4 text-white' style={{ marginTop: '70px' }}>
                     <div className="row align-items-center">
                         <div className="col-sm-9">
                             <div className='p-3'>
@@ -33,11 +33,11 @@ export default function Home() {
 
             <div className='rounded-4 bg-success-subtle mt-3'>
                 <div className="row align-items-center p-3">
-                    <div className='col-md-9'>
+                    <div className='col-lg-9'>
                         <h3>Fill The <span className='text-success'>Recipes</span> !</h3>
                         <p>you can now fill the meals easily using the table and form , click here and sill it with the table !</p>
                     </div>
-                    <div className='col-md-3 text-end'>
+                    <div className='col-lg-3 text-end'>
                         <Link to={'/dashboard/recipes'} className='btn btn-success px-5'>Fill Recipes <i className='fa fa-arrow-right ms-2'></i> </Link>
                     </div>
                 </div>

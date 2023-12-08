@@ -24,7 +24,7 @@
     top: 0;
     bottom: 0; */
     /* z-index: 555555555555; */
-    background-color: rgba(31, 38, 62, 0.5);
+    /* background-color: rgba(31, 38, 62, 0.5); */
     padding-right: 5px;
     /* position: fixed; */
     /* top: 0; */
@@ -33,7 +33,6 @@
 
 
 .bg-kohly {
-    margin-right: 20px;
     background-color: rgba(31, 38, 62, 1);
 }
 
@@ -77,8 +76,8 @@
 }
 
 .noUser-img {
-    width: 85px;
-    height: 85px;
+    width: 25px;
+    height: 25px;
 }
 
 .active>.page-link,
@@ -97,6 +96,88 @@
 } */
 
 .container-fluid {
-    padding-left: 0 !important;
+    /* padding-left: 0 !important; */
     /* padding-right: 0 !important; */
+}
+
+.sb-button {
+    background-color: green !important;
+    border: none;
+    padding: 7px 7px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.css-dip3t8 {
+    background-color: rgba(31, 38, 62, 0.7) !important;
+    color: white;
+}
+
+.menu-logo {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.fake-nav {
+    height: 50px;
+    width: 25%;
+    background-color: transparent;
+    position: fixed;
+    top: 0;
+}
+
+.navbar {
+    position: fixed;
+    width: 89.5%;
+    top: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 0 9px 0 rgba(71, 70, 70, 0.6);
+}
+
+.css-1wvake5 {
+    border: none !important;
+}
+
+@media (max-width: 777px) {
+    .content-container {
+        padding: 5px !important;
+    }
+
+    .add-new-cat {
+        margin-bottom: 10px;
+    }
+
+    .name-search-recipe {
+        margin-bottom: 10px;
+    }
+
+    .navbar {
+        padding-left: 5px;
+        position: fixed;
+
+    }
+
+}
+
+@media (max-width: 945px) {
+
+    .side-bar {
+        display: none;
+    }
+
+    .hidden-sb {
+        display: block !important;
+    }
+
+    .navbar {
+        width: 95%;
+    }
+
+    .main-button {
+        padding-left: 18px !important;
+    }
+
+
 }

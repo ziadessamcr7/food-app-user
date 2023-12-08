@@ -24,6 +24,8 @@ function App() {
 
   const [adminData, setAdminData] = useState(null)
 
+
+
   useEffect(() => {
     if (localStorage.getItem('adminToken')) {
       saveAdminData()
@@ -45,7 +47,7 @@ function App() {
       errorElement: <NotFound />,
       children: [
         { path: '', element: <Login saveAdminData={saveAdminData} /> },
-        { path: 'food-app-login', element: <Login saveAdminData={saveAdminData} /> },
+        { path: 'food-app-admin', element: <Login saveAdminData={saveAdminData} /> },
         { path: 'forget-pass', element: <ForgetPassword /> },
         { path: 'reset-pass', element: <ResetPassword /> },
 
@@ -64,7 +66,6 @@ function App() {
         { path: 'users', element: <UsersList /> },
         { path: 'categories', element: <CategoriesList /> },
         { path: 'recipes', element: <RecipesList /> },
-        // { path: 'change-pass', element: <ChangePassword /> }
       ]
 
     }

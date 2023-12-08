@@ -152,7 +152,7 @@ export default function CategoriesList() {
 
             <Modal show={modaleState == 'modal-add'} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>  {/*moadl of addin catgeory*/}
+                    <Modal.Title></Modal.Title>  {/*moadl of addin catgeory*/}
                 </Modal.Header>
                 <Modal.Body>
                     <h4>Add Category</h4>
@@ -175,7 +175,7 @@ export default function CategoriesList() {
 
             <Modal show={modaleState == 'modal-del'} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>  {/*moadl of addin catgeory*/}
+                    <Modal.Title></Modal.Title>  {/*moadl of addin catgeory*/}
                 </Modal.Header>
                 <Modal.Body>
                     <div className='text-center'>
@@ -191,7 +191,7 @@ export default function CategoriesList() {
 
             <Modal show={modaleState == 'modal-update'} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <h4>Update Category</h4>
@@ -214,16 +214,16 @@ export default function CategoriesList() {
 
 
 
-            <Header>
-                <div className='header-container rounded-4 text-white mt-4'>
+            <Header >
+                <div className='header-container rounded-4 text-white' style={{ marginTop: '70px' }}>
                     <div className="row align-items-center">
-                        <div className="col-md-10">
+                        <div className="col-sm-10">
                             <div className='p-3'>
-                                <h1>Welcome Categoriesss!</h1>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, necessitatibus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, officia! </p>
+                                <h1>Categories List</h1>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, necessitatibus. Lorem ipsum <br /> dolor sit amet consectetur adipisicing elit. Rem, officia! </p>
                             </div>
                         </div>
-                        <div className="col-md-2">
+                        <div className="col-sm-2">
                             <div>
                                 <img src={Mypic} className='w-100' alt="header-pic" />
                             </div>
@@ -239,10 +239,13 @@ export default function CategoriesList() {
                         <p>You can check all details</p>
                     </div>
                     <div className="col-sm-5 text-end">
-                        <button onClick={showAddCategoryModal} className='btn btn-success ps-3'>Add New Category</button>
+                        <button onClick={showAddCategoryModal} className='add-new-cat btn btn-success ps-3'>Add New Category</button>
                     </div>
 
-                    <input onChange={searchByName} type="text" className='form-control w-50 mb-2' placeholder='search by name' />
+                    <div className="col-sm-4">
+                        <input onChange={searchByName} type="text" className='form-control w-50 mb-2 w-100' placeholder='search by name' />
+                    </div>
+
 
                     {categoryList?.length == 0 ? <NoData /> : <> <div className='table-responsive' ><table class="table text-center table-striped ">
                         <thead className='table-head'>
@@ -256,7 +259,7 @@ export default function CategoriesList() {
                             <tbody className=''>
                                 {categoryList?.map((category, idx) => {
                                     return <tr key={idx}>
-                                        <td scope="row"> {idx + 1} </td>
+                                        <td scope="row" className='fw-bold'> {idx + 1} </td>
                                         <td> {category.name} </td>
                                         <td>
                                             <i title='delete' onClick={() => { showDeleteCategoryModal(category.id) }}
@@ -268,7 +271,7 @@ export default function CategoriesList() {
                                 }
                                 )}
                             </tbody>
-                        } </> : <h2
+                        } </> : <span
                             className='d-flex justify-content-center align-items-center'>
                             <Oval
                                 height={60}
@@ -282,11 +285,11 @@ export default function CategoriesList() {
                                 strokeWidth={5}
                                 strokeWidthSecondary={5}
 
-                            /></h2>}
+                            /></span>}
                     </table>
                     </div>
                         <nav aria-label="...">
-                            <ul class="pagination pagination-sm">
+                            <ul class="pagination pagination-sm d-flex justify-content-end">
                                 {console.log(pagesArray)}
                                 {pagesArray?.map((pageNo, idx) => {
                                     return <li onClick={() => { getCategoriesList(pageNo, searchString) }} key={idx} class="page-item " aria-current="page">
