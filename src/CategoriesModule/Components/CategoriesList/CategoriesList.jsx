@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import NoDataImg from '../../../assets/imgs/freepik--Character--inject-70.png'
 import { toast } from 'react-toastify'
 import { Oval } from 'react-loader-spinner'
+import ReactPaginate from 'react-paginate'
 
 
 export default function CategoriesList() {
@@ -22,6 +23,9 @@ export default function CategoriesList() {
     const [pagesArray, setPagesArray] = useState([])
 
     const [searchString, setSearchString] = useState('')
+
+    const [totalNumOfPages, setTotalNumOfPages] = useState(0)
+
 
     const showAddCategoryModal = () => {
         setModalState('modal-add')
@@ -84,6 +88,7 @@ export default function CategoriesList() {
             }
         }).then((response) => {
             setCategoryList(response.data.data)
+            setTotalNumOfPages(response.data.totalNumberOfPages)
             setPagesArray(Array(response.data.totalNumberOfPages).fill().map((_, i) => i + 1))
         }).catch((error) => {
             console.log(error);
@@ -142,6 +147,11 @@ export default function CategoriesList() {
             setLoading(false)
             toast.error(error)
         })
+    }
+
+    const handlPageChange = (data) => {
+        let currentPage = data.selected + 1
+        getCategoriesList(currentPage)
     }
 
 
@@ -288,16 +298,23 @@ export default function CategoriesList() {
                             /></span>}
                     </table>
                     </div>
-                        <nav aria-label="...">
-                            <ul class="pagination pagination-sm d-flex justify-content-end">
-                                {console.log(pagesArray)}
-                                {pagesArray?.map((pageNo, idx) => {
-                                    return <li onClick={() => { getCategoriesList(pageNo, searchString) }} key={idx} class="page-item " aria-current="page">
-                                        <span className="page-link active" style={{ cursor: "pointer" }}> {pageNo} </span>
-                                    </li>
-                                })}
-                            </ul>
-                        </nav></>}
+                        <ReactPaginate
+                            breakLabel={'...'}
+                            pageCount={totalNumOfPages}
+                            marginPagesDisplayed={1}
+                            pageRangeDisplayed={4}
+                            onPageChange={handlPageChange}
+                            containerClassName='pagination justify-content-end'
+                            pageClassName='page-item'
+                            pageLinkClassName='page-link'
+                            previousClassName='page-item'
+                            previousLinkClassName='page-link'
+                            nextClassName='page-item'
+                            nextLinkClassName='page-link'
+                            breakClassName='page-item'
+                            breakLinkClassName='page-link'
+                            activeClassName='active'
+                        /></>}
 
                 </div>
             </div>

@@ -58,6 +58,9 @@ export default function Login({ saveAdminData }) {
             })
     }
 
+    // toast('email: ziadessamcr7@gmail.com password: Zizo123!', {
+    //     autoClose: false
+    // })
 
 
     return (

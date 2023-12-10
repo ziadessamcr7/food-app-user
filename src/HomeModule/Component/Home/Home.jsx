@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 export default function Home() {
     return (
-        <section className='vh-100 overflow-hidden'>
+        <section className='home vh-100 overflow-hidden'>
             <Header >
                 <div className='header-container rounded-4 text-white' style={{ marginTop: '70px' }}>
                     <div className="row align-items-center">

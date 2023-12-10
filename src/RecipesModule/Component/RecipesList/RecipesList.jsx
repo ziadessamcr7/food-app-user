@@ -9,7 +9,7 @@ import NoDataImg from '../../../assets/imgs/freepik--Character--inject-70.png'
 import noImg from '../../../assets/imgs/noImg.png'
 import { Oval } from 'react-loader-spinner';
 import NoData from '../../../SharedModule/Component/NoData/NoData';
-
+import ReactPaginate from 'react-paginate';
 
 
 
@@ -34,6 +34,9 @@ export default function RecipesList() {
     const [searchTag, setSearchTag] = useState(null)
 
     const [searchCat, setSearchCat] = useState(null)
+
+    const [totalNumOfPages, setTotalNumOfPages] = useState(0)
+
 
 
 
@@ -135,6 +138,7 @@ export default function RecipesList() {
         }).then((response) => {
             console.log(response)
             setRecipeList(response.data.data)
+            setTotalNumOfPages(response.data.totalNumberOfPages)
             setPagesArray(Array(response.data.totalNumberOfPages).fill().map((_, i) => i + 1))
         }).catch((error) => {
             console.log(error)
@@ -197,6 +201,11 @@ export default function RecipesList() {
         getRecipesList(1, null, searchTag, e.target.value)
         setSearchCat(e.target.value)
 
+    }
+
+    const handlPageChange = (data) => {
+        let currentPage = data.selected + 1
+        getRecipesList(currentPage, null, null)
     }
 
 
@@ -427,15 +436,15 @@ export default function RecipesList() {
                 </div>
                 <div className="col-sm-4">
                     <select onChange={searchByTag} className='form-select'>
-                        <option selected>search by tag</option>
-                        {tagList?.map((tag) => { return <> <option selected value={tag.id}> {tag.name} </option> </> })}
+                        <option value='' selected>search by tag</option>
+                        {tagList?.map((tag) => { return <> <option value={tag.id}> {tag.name} </option> </> })}
 
                     </select>
                 </div>
                 <div className="col-sm-4">
                     <select onChange={searchByCategory} className='form-select'>
-                        <option selected >search by category</option>
-                        {categoryList?.map((cat) => { return <> <option selected value={cat.id}> {cat.name} </option> </> })}
+                        <option value='' selected >search by category</option>
+                        {categoryList?.map((cat) => { return <option value={cat.id}> {cat.name} </option> })}
                     </select>
                 </div>
             </div>
@@ -498,16 +507,23 @@ export default function RecipesList() {
                 </tbody>
             </table>
             </div>
-                <nav aria-label="...">
-                    <ul class="pagination pagination-sm d-flex justify-content-end">
-                        {console.log(pagesArray)}
-                        {pagesArray?.map((pageNo, idx) => {
-                            return <li onClick={() => { getRecipesList(pageNo, searchString, searchTag, searchCat) }} key={idx} class="page-item " aria-current="page">
-                                <span className="page-link active" style={{ cursor: "pointer" }}> {pageNo} </span>
-                            </li>
-                        })}
-                    </ul>
-                </nav></>}
+                <ReactPaginate
+                    breakLabel={'...'}
+                    pageCount={totalNumOfPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={4}
+                    onPageChange={handlPageChange}
+                    containerClassName='pagination justify-content-end'
+                    pageClassName='page-item'
+                    pageLinkClassName='page-link'
+                    previousClassName='page-item'
+                    previousLinkClassName='page-link'
+                    nextClassName='page-item'
+                    nextLinkClassName='page-link'
+                    breakClassName='page-item'
+                    breakLinkClassName='page-link'
+                    activeClassName='active'
+                /></>}
 
 
 

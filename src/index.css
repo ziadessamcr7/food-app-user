@@ -82,15 +82,14 @@
 
 .active>.page-link,
 .page-link.active {
-    background-color: rgb(39, 131, 39);
+    /* background-color: rgb(39, 131, 39); */
     border-color: white;
 }
 
 .active>.page-link,
 .page-link.active:hover {
-    background-color: black;
+    background-color: rgb(47, 140, 51);
 }
-
 
 
 .container-fluid {
@@ -177,5 +176,14 @@
         padding-left: 18px !important;
     }
 
+    .home {
+        height: auto !important;
+    }
+
+    .pagination {
+
+        --bs-pagination-padding-x: 0.45rem;
+        --bs-pagination-padding-y: 0.45rem;
+    }
 
 }

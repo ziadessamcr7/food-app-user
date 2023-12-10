@@ -11,6 +11,7 @@ import NoData from '../../../SharedModule/Component/NoData/NoData'
 import { Modal } from 'react-bootstrap'
 import NoDataImg from '../../../assets/imgs/freepik--Character--inject-70.png'
 import { toast } from 'react-toastify'
+import ReactPaginate from 'react-paginate'
 
 
 
@@ -26,6 +27,10 @@ export default function UsersList() {
 
     const [searchString, setSearchString] = useState('')
 
+    const [pageNumber, setPageNumber] = useState(0)
+
+    const [totalNumOfPages, setTotalNumOfPages] = useState(0)
+
 
     const [show, setShow] = useState(false);
 
@@ -33,7 +38,7 @@ export default function UsersList() {
 
     const handleShow = (id) => {
         setUserId(id)
-        setShow(true);
+        setShow(true)
     }
 
 
@@ -46,10 +51,11 @@ export default function UsersList() {
                 pageNumber: pageNum,
                 userName: name,
                 email: mail
-
             }
         }).then((response) => {
-            console.log(response.data.data)
+            console.log(response.data)
+            setPageNumber(response.data.pageNumber)
+            setTotalNumOfPages(response.data.totalNumberOfPages)
             setUsersList(response.data.data)
             setPagesArray(Array(response.data.totalNumberOfPages).fill().map((_, i) => i + 1))
         }).catch((error) => {
@@ -87,10 +93,18 @@ export default function UsersList() {
     const searchByMail = (e) => {
         getAllUsers(1, '', e.target.value)
     }
+
+    const handlPageChange = (data) => {
+        let currentPage = data.selected + 1
+        getAllUsers(currentPage, null, null)
+    }
+
+
     useEffect(() => {
         getAllUsers(1)
     }, [])
 
+    // getAllUsers(1)
 
 
     return (
@@ -199,17 +213,28 @@ export default function UsersList() {
                         /></span>}
                 </tbody>
             </table>
-            </div>
-                <nav aria-label="...">
-                    <ul class="pagination pagination-sm d-flex justify-content-end">
-                        {console.log(pagesArray)}
-                        {pagesArray?.map((pageNo, idx) => {
-                            return <li onClick={() => { getAllUsers(pageNo, searchString) }} key={idx} class="page-item " aria-current="page">
-                                <span id='page' className="page-link active" style={{ cursor: "pointer" }}> {pageNo} </span>
-                            </li>
-                        })}
-                    </ul>
-                </nav></>}
+                <ReactPaginate
+                    breakLabel={'...'}
+                    pageCount={totalNumOfPages}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlPageChange}
+                    containerClassName='pagination justify-content-end'
+                    pageClassName='page-item'
+                    pageLinkClassName='page-link'
+                    previousClassName='page-item'
+                    previousLinkClassName='page-link'
+                    nextClassName='page-item'
+                    nextLinkClassName='page-link'
+                    breakClassName='page-item'
+                    breakLinkClassName='page-link'
+                    activeClassName='active'
+                />
+            </div></>}
+
+
+
+
         </div>
 
 

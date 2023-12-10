@@ -16,7 +16,7 @@ import ProtectedRoute from './SharedModule/Component/ProtectedRoute/ProtectedRou
 import { jwtDecode } from 'jwt-decode'
 import ResetPassword from './AuthModule/Components/ResetPassword/ResetPassword'
 
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -70,6 +70,8 @@ function App() {
 
     }
   ])
+
+
 
   return (
     <>
