@@ -267,7 +267,7 @@ export default function RecipesList() {
                         })} >
                             <option selected disabled>tag</option>
                             {tagList?.map((tag) => {
-                                return <option value={tag.id} > {tag.id} {tag.name} </option>
+                                return <option value={tag.id}> {tag.name} </option>
                             })}
                         </select>
                         {errors.tagId && errors.tagId.type == 'required'
@@ -282,7 +282,7 @@ export default function RecipesList() {
                         })}>
                             <option selected disabled>category</option>
                             {categoryList?.map((category) => {
-                                return <option value={category.id} > {category.id} {category.name}   </option>
+                                return <option value={category.id}> {category.name}   </option>
                             })}
 
                         </select>
@@ -468,7 +468,7 @@ export default function RecipesList() {
                 <tbody>
                     {recipeList ? <>  {recipeList?.map((recipe, idx) => {
                         return <tr>
-                            <th scope="row"> {idx + 1} {recipe.id} </th>
+                            <th scope="row"> {idx + 1} </th>
                             <td >{recipe.name}</td>
                             {recipe.imagePath ? <td>
                                 <img src={'https://upskilling-egypt.com:443/' + recipe.imagePath} className='recipe-img' alt="" /> </td>
@@ -476,8 +476,8 @@ export default function RecipesList() {
 
                             <td>{recipe.price} L.E </td>
                             <td>{recipe.description}</td>
-                            <td>{recipe.category[0]?.name} {recipe.category[0]?.id} </td>
-                            <td>{recipe.tag.name} {recipe.tag.id}</td>
+                            <td>{recipe.category[0]?.name} </td>
+                            <td>{recipe.tag.name} </td>
                             <td>
                                 <i title='delete' onClick={() => { ShowDeleteRecipeModal(recipe.id) }}
                                     className='fa fa-trash text-danger'

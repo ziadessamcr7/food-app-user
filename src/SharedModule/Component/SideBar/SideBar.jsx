@@ -37,7 +37,7 @@ export default function SideBar() {
         <div className='side-bar'>
             <Sidebar collapsed={isCollapsed}
                 backgroundColor='rgba(31, 38, 62, 1)'
-                className='text-white'>
+                className='text-white vh-100'>
                 <Menu className='' >
 
                     <Modal show={show} onHide={handleClose}>

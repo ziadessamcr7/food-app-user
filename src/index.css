@@ -32,7 +32,7 @@
 }
 
 
-.bg-kohly {
+.bg-darkBlue {
     background-color: rgba(31, 38, 62, 1);
 }
 
@@ -62,9 +62,6 @@
     background-repeat: no-repeat;
 }
 
-.table-head {
-    /* background-color: red !important; */
-}
 
 .t-h {
     background-color: rgb(211, 211, 211) !important;
@@ -81,16 +78,9 @@
 }
 
 .active>.page-link,
-.page-link.active {
-    /* background-color: rgb(39, 131, 39); */
-    border-color: white;
-}
-
-.active>.page-link,
 .page-link.active:hover {
     background-color: rgb(47, 140, 51);
 }
-
 
 .container-fluid {
     /* padding-left: 0 !important; */
@@ -126,7 +116,7 @@
 
 .navbar {
     position: fixed;
-    width: 89.5%;
+    width: 90.5%;
     top: 0;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -181,7 +171,6 @@
     }
 
     .pagination {
-
         --bs-pagination-padding-x: 0.45rem;
         --bs-pagination-padding-y: 0.45rem;
     }
