@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import myImg from '../../../assets/imgs/4 3.png'
 import { Link, useNavigate } from 'react-router-dom'
@@ -6,10 +6,14 @@ import { useForm, useWatch } from 'react-hook-form'
 
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import { AuthContext } from '../../../Context/AuthContext'
 
 export default function ResetPassword() {
 
     const [loading, setLoading] = useState(false)
+
+    const { baseUrl } = useContext(AuthContext)
+
 
     const {
         register,
@@ -27,12 +31,12 @@ export default function ResetPassword() {
     const onSubmit = (data) => {
         console.log(data)
         setLoading(true)
-        axios.post('https://upskilling-egypt.com:443/api/v1/Users/Reset', data)
+        axios.post(`${baseUrl}/Users/Reset`, data)
             .then(function (response) {
                 toast.success(response.data.message)
                 console.log(response);
                 setTimeout(() => {
-                    nav('/food-app-admin')
+                    nav('/food-app-user')
                 }, 4000);
                 setLoading(false)
 

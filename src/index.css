@@ -34,6 +34,7 @@
 
 .bg-darkBlue {
     background-color: rgba(31, 38, 62, 1);
+    border-top-right-radius: 50px;
 }
 
 .box {
@@ -83,7 +84,7 @@
 }
 
 .container-fluid {
-    /* padding-left: 0 !important; */
+    padding-left: 0 !important;
     /* padding-right: 0 !important; */
 }
 
@@ -100,10 +101,25 @@
     color: white;
 }
 
+
 .menu-logo {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+}
+
+.chef-hat {
+    width: 100px;
+    height: 100px;
+}
+
+
+.not-found {
+    background-image: url('../src/assets/imgs/NotFound.png');
+    height: 100vh;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 .fake-nav {
@@ -114,13 +130,21 @@
     top: 0;
 }
 
+.input-icon {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
 .navbar {
     position: fixed;
-    width: 90.5%;
+    width: 98.5%;
     top: 0;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     box-shadow: 0 0 9px 0 rgba(71, 70, 70, 0.6);
+    z-index: 1;
+
 }
 
 .css-1wvake5 {
@@ -146,6 +170,11 @@
 
     }
 
+    .container-fluid {
+        padding-left: 7px !important;
+        /* padding-right: 0 !important; */
+    }
+
 }
 
 @media (max-width: 945px) {
@@ -159,7 +188,7 @@
     }
 
     .navbar {
-        width: 95%;
+        width: 96%;
     }
 
     .main-button {

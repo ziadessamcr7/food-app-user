@@ -3,7 +3,7 @@ import SideBar from '../SideBar/SideBar'
 import { Outlet } from 'react-router-dom'
 import Navbar from './../Navbar/Navbar';
 
-export default function MasterLayout({ adminData }) {
+export default function MasterLayout({ userData }) {
     return (
         <div className='container-fluid'>
             <div className="d-flex ">
@@ -13,7 +13,7 @@ export default function MasterLayout({ adminData }) {
                 <div className="w-100">
                     <div>
                         <div className=' content-container ps-3 position-relative'>
-                            <Navbar adminData={adminData} />
+                            <Navbar userData={userData} />
                             <div className="fake-nav">
 
                             </div>
