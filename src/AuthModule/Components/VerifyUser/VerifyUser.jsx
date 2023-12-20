@@ -6,9 +6,13 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from '../../../Context/AuthContext'
+import { ToastContext } from '../../../Context/ToastContext'
 
 
-export default function ForgetPassword() {
+export default function VerifyUser() {
+
+
+    const { getToastValues } = useContext(ToastContext)
 
     const nav = useNavigate()
     const [loading, setloading] = useState(false)
@@ -24,17 +28,17 @@ export default function ForgetPassword() {
 
     } = useForm()
 
-    const onSubmit = (data) => {
+    const SubmitVerify = (data) => {
         console.log(data)
 
         setloading(true)
 
-        axios.post(`${baseUrl}/Users/Reset/Request`, data)
+        axios.put(`${baseUrl}/Users/verify`, data)
             .then(function (response) {
                 toast.success(response.data.message)
                 console.log(response);
 
-                nav('/reset-pass')
+                nav('/food-app-user')
 
             })
             .catch(function (error) {
@@ -53,10 +57,10 @@ export default function ForgetPassword() {
                         <div className='text-center'>
                             <img src={myImg} alt="logo" className='w-50' />
                         </div>
-                        <h2 className='pt-5'>Request Reset Password</h2>
+                        <h2 className='pt-5'>Verify Account</h2>
                         <p className='text-muted'>Please Enter Your E-mail and Check Your Inbox</p>
 
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <form onSubmit={handleSubmit(SubmitVerify)}>
                             <div className='bg-ino box d-flex align-items-center mt-4 p1 rounded-2'>
                                 <div className='icon p-2'>
                                     <i className="fa fa-envelope"></i>
@@ -76,6 +80,24 @@ export default function ForgetPassword() {
                                 <span className='text-danger'>Email is required</span>}
                             {errors.email && errors.email.type === 'pattern' &&
                                 <span className='text-danger'>Enter a valid email</span>}
+
+                            <div className='bg-ino box d-flex align-items-center mt-4 p1 rounded-2'>
+                                <div className='icon p-2'>
+                                    <i className="fa fa-lock"></i>
+                                </div>
+                                <input type="text"
+
+
+                                    placeholder='Enter your code'
+                                    className='form-control mx-auto'
+                                    {...register('code', {
+                                        required: true,
+                                    })} />
+                            </div>
+
+                            {errors.code && errors.code.type === 'required' &&
+                                <span className='text-danger'>Code is required</span>}
+
 
                             <button className='btn btn-success d-flex justify-content-center w-100 mt-4 fw-bolder'>
                                 {loading === true ? <i className='fa-solid fa-spin fa-spinner py-1'></i>

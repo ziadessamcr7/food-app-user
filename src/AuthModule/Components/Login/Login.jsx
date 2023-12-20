@@ -1,16 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import myImg from '../../../assets/imgs/4 3.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { set, useForm } from 'react-hook-form'
 import axios from 'axios'
 
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { Oval } from 'react-loader-spinner'
+import { AuthContext } from '../../../Context/AuthContext'
+import { ToastContext } from '../../../Context/ToastContext'
 
 
-export default function Login({ saveAdminData }) {
+export default function Login({ }) {
 
+    const { baseUrl, saveUserData } = useContext(AuthContext)
+    const { getToastValues } = useContext(ToastContext)
 
 
     const nav = useNavigate()
@@ -29,9 +33,9 @@ export default function Login({ saveAdminData }) {
 
     } = useForm()
 
-    if (localStorage.getItem('adminToken') !== null) {
+    if (localStorage.getItem('userToken') !== null) {
         setTimeout(() => {
-            nav('/dashboard')
+            nav('/home')
         }, 100);
     }
 
@@ -40,16 +44,17 @@ export default function Login({ saveAdminData }) {
 
         setloading(true)
 
-        axios.post('https://upskilling-egypt.com:443/api/v1/Users/Login', data)
+        axios.post(`${baseUrl}/Users/Login`, data)
             .then(function (response) {
-                toast.success('Login success', {
-                    autoClose: 2000
-                })
-                console.log(response.data.token);
-                nav('/dashboard')
+                { () => getToastValues('success', 'login success') }
 
-                localStorage.setItem('adminToken', response.data.token)
+                nav('/home')
+                console.log(response);
+
+                localStorage.setItem('userToken', response.data.token)
                 setloading(false)
+
+                saveUserData()  // 3ashan a5aly el esm yzhar fl navbar w el header
             })
             .catch(function (error) {
                 console.log('errorrr', error.response.data.message);
@@ -64,7 +69,9 @@ export default function Login({ saveAdminData }) {
 
 
     return (
+
         <div className="auth-container container-fluid">
+
             <div className="row overlay login justify-content-center align-items-center">
                 <div className="col-md-6">
                     <div className='bg-white p-5 rounded-3'>
@@ -95,7 +102,7 @@ export default function Login({ saveAdminData }) {
                             {errors.email && errors.email.type === 'pattern' && (<span className='text-danger'>Enter a valid email</span>)
                             }
 
-                            <div className='bg-ino box d-flex align-items-center mt-4 p1 rounded-2' >
+                            <div className='bg-ino box d-flex align-items-center mt-4 rounded-2' >
                                 <div className='icon p-2'>
                                     <i className="fa fa-lock bg-dange"></i>
                                 </div>
@@ -112,7 +119,7 @@ export default function Login({ saveAdminData }) {
                             {errors.password && errors.password.type === 'required' &&
                                 <span className='text-danger'>Password is required</span>}
                             <div className='d-flex justify-content-between w-100'>
-                                <span className="fw-medium">Register Now?</span>
+                                <Link to={'/register'} className="fw-medium text-dark">Register Now?</Link>
                                 <Link to={'/forget-pass'} className='text-success' style={{ cursor: 'pointer' }} >Forgot Password?</Link>
                             </div>
                             <button className='btn btn-success d-flex justify-content-center w-100 mt-4 fw-bolder'>

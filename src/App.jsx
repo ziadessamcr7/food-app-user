@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useContext, useEffect, useState } from 'react'
+
 import './App.css'
 import Login from './AuthModule/Components/Login/Login'
 import MasterLayout from './SharedModule/Component/MasterLayout/MasterLayout'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import NotFound from './SharedModule/Component/NotFound/NotFound'
 import Home from './HomeModule/Component/Home/Home'
-import UsersList from './UsersModule/Component/UsersList/UsersList'
-import CategoriesList from './CategoriesModule/Components/CategoriesList/CategoriesList'
 import RecipesList from './RecipesModule/Component/RecipesList/RecipesList'
 import AuthLayout from './SharedModule/Component/AuthLayout/AuthLayout'
 import ForgetPassword from './AuthModule/Components/ForgetPassword/ForgetPassword'
@@ -16,29 +13,17 @@ import ProtectedRoute from './SharedModule/Component/ProtectedRoute/ProtectedRou
 import { jwtDecode } from 'jwt-decode'
 import ResetPassword from './AuthModule/Components/ResetPassword/ResetPassword'
 
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import Favorites from './RecipesModule/Component/Favorites'
+import Register from './AuthModule/Components/Register/Register'
+import { AuthContext } from './Context/AuthContext'
+import VerifyUser from './AuthModule/Components/VerifyUser/VerifyUser'
 
 
 function App() {
 
-  const [adminData, setAdminData] = useState(null)
-
-
-
-  useEffect(() => {
-    if (localStorage.getItem('adminToken')) {
-      saveAdminData()
-    }
-  }, [])
-
-
-
-  const saveAdminData = () => {
-    const encodedToken = localStorage.getItem('adminToken')
-    const decodedToken = jwtDecode(encodedToken)
-    setAdminData(decodedToken)
-  }
+  let { userData, saveUserData } = useContext(AuthContext)
 
   const route = createBrowserRouter([
     {
@@ -46,26 +31,27 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { path: '', element: <Login saveAdminData={saveAdminData} /> },
-        { path: 'food-app-admin', element: <Login saveAdminData={saveAdminData} /> },
+        { path: '', element: <Login saveUserData={saveUserData} /> },
+        { path: 'food-app-user', element: <Login saveUserData={saveUserData} /> },
         { path: 'forget-pass', element: <ForgetPassword /> },
         { path: 'reset-pass', element: <ResetPassword /> },
+        { path: 'register', element: <Register /> },
+        { path: 'verify-user', element: <VerifyUser /> },
 
       ]
 
     },
     {
-      path: 'dashboard',
-      element: <ProtectedRoute adminData={adminData} >
-        <MasterLayout adminData={adminData} />
+      path: 'home',
+      element: <ProtectedRoute userData={userData} >
+        <MasterLayout userData={userData} />
       </ProtectedRoute>,
       errorElement: <NotFound />,
       children: [
         { path: '', element: <Home /> },
         { path: 'home', element: <Home /> },
-        { path: 'users', element: <UsersList /> },
-        { path: 'categories', element: <CategoriesList /> },
         { path: 'recipes', element: <RecipesList /> },
+        { path: 'favorites', element: <Favorites /> },
       ]
 
     }

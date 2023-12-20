@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Mypic from '../../../assets/imgs/Group 48102127.svg'
 import Header from '../../../SharedModule/Component/Header/Header'
 import axios from 'axios'
@@ -10,6 +10,8 @@ import noImg from '../../../assets/imgs/noImg.png'
 import { Oval } from 'react-loader-spinner';
 import NoData from '../../../SharedModule/Component/NoData/NoData';
 import ReactPaginate from 'react-paginate';
+import { AuthContext } from '../../../Context/AuthContext';
+import { ToastContext } from '../../../Context/ToastContext';
 
 
 
@@ -25,11 +27,10 @@ export default function RecipesList() {
 
     const [recipeId, setRecipeId] = useState(0)   // me7tagha fi el api bta3 el update w el delete
 
-    const [recipeObj, setRecipeObj] = useState(null)  // me7tagha 3shan a3rd el image fl update modal
-
     const [pagesArray, setPagesArray] = useState([]) //3shan el pagination yzhrly kam page
 
     const [searchString, setSearchString] = useState('') //3shan el pagination ama ados 3ala ay page yfdl 3amel search
+
 
     const [searchTag, setSearchTag] = useState(null)
 
@@ -37,86 +38,66 @@ export default function RecipesList() {
 
     const [totalNumOfPages, setTotalNumOfPages] = useState(0)
 
+    const { requestHeaders, baseUrl } = useContext(AuthContext)
 
-
-
-
+    const { getToastValues } = useContext(ToastContext)
 
     const [modalState, setModalState] = useState('close');
 
-    const ShowAddRecipeModal = () => {
+    const [recipeDetails, setRecipeDetails] = useState()
 
-        setModalState('modal-add');
-        setValue('name', '')
-        setValue('price', '')
-        setValue('description', '')
-        setValue('categoriesIds', '')
-        setValue('tagId', '')
-    }
-    const ShowDeleteRecipeModal = (id) => {
+    useEffect(() => {
+        getRecipesList(1)
+        getAllTags()
+        getCategoriesList()
+    }, [])
+
+
+    const ShowViewRecipeModal = (id) => {
         setRecipeId(id)
-        setModalState('modal-del');
-    }
-    const ShowUpdateRecipeModal = (recipe) => {
-        console.log(recipe);
+        setModalState('modal-view');
+        getRecipeDetails(id)
 
-        setRecipeId(recipe.id)
-        setRecipeObj(recipe)
-        setModalState('modal-update');
-        setValue('name', recipe.name)
-        setValue('price', recipe.price)
-        setValue('description', recipe.description)
-        setValue('tagId', recipe?.tag?.id)
-        setValue('categoriesIds', recipe?.category[0]?.id)
     }
+
     const handleClose = () => setModalState('close');
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        setValue
-    } = useForm({
-    })
+    const getRecipeDetails = (id) => {
+        axios.get(`${baseUrl}/Recipe/${id}`, {
+            headers: requestHeaders
+        }).then((response) => {
+            console.log(response.data)
+            setRecipeDetails(response.data)
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
 
-    const submitFrom = (data) => {
-
+    const addToFavorite = () => {
         setLoading(true)
+        axios.post(`${baseUrl}/userRecipe/`, {
+            recipeId: recipeId
+        }, {
+            headers: requestHeaders
 
-        axios.post('https://upskilling-egypt.com:443/api/v1/Recipe/', { ...data, recipeImage: data.recipeImage[0] }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
-                "content-type": "multipart/form-data"
-            }
-        }).then((response) => {
-            console.log(response)
-            getRecipesList()
-            handleClose()
-            toast.success(response.data.message, {
-                autoClose: 2500
+        })
+            .then((response) => {
+                console.log(response.data.recipe);
+                setLoading(false)
+                handleClose()
+                toast.success('Added successfully to your favorites', {
+                    autoClose: 2000
+                })
+            }).catch((error) => {
+                console.log(error);
+                setLoading(false)
             })
-            setLoading(false)
-
-        }).catch((error) => {
-            console.log(error);
-            setLoading(false)
-        })
     }
 
-    const getCategoriesList = () => {
-        axios.get('https://upskilling-egypt.com:443/api/v1/Category/?pageSize=20&pageNumber=1', {
-            headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
-        }).then((response) => {
-            console.log(response)
-            setCategoryList(response?.data?.data)
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
 
     const getAllTags = () => {
-        axios.get('https://upskilling-egypt.com:443/api/v1/tag/', {
-            headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+        axios.get(`${baseUrl}/tag/`, {
+            headers: requestHeaders
         }).then((response) => {
             console.log(response.data)
             setTagList(response.data)
@@ -125,9 +106,25 @@ export default function RecipesList() {
         })
     }
 
+    const getCategoriesList = (pageNum, searchName) => {
+        axios.get(`${baseUrl}/Category/`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('userToken')}` },
+            params: {
+                pageSize: 100,
+                pageNumber: pageNum,
+                name: searchName
+            }
+        }).then((response) => {
+            setCategoryList(response.data.data)
+            // setPagesArray(Array(response.data.totalNumberOfPages).fill().map((_, i) => i + 1))
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
     const getRecipesList = (pageNum, searchName, tagId, catId) => {
-        axios.get('https://upskilling-egypt.com:443/api/v1/Recipe/?', {
-            headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
+        axios.get(`${baseUrl}/Recipe/`, {
+            headers: requestHeaders,
             params: {
                 pageSize: 4,
                 pageNumber: pageNum,
@@ -139,55 +136,19 @@ export default function RecipesList() {
             console.log(response)
             setRecipeList(response.data.data)
             setTotalNumOfPages(response.data.totalNumberOfPages)
-            setPagesArray(Array(response.data.totalNumberOfPages).fill().map((_, i) => i + 1))
+            // setPagesArray(Array(response.data.totalNumberOfPages).fill().map((_, i) => i + 1))
         }).catch((error) => {
             console.log(error)
         })
     }
 
-    const deleteRecipe = () => {
-        setLoading(true)
-        axios.delete(`https://upskilling-egypt.com:443/api/v1/Recipe/${recipeId}`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
-        }).then((response) => {
-            toast.success('Deleted Successfully', {
-                autoClose: 2500
-            })
-            getRecipesList()
-            handleClose()
-            setLoading(false)
-
-        }).catch((error) => {
-            console.log(error)
-            setLoading(false)
-        })
 
 
-    }
-
-    const updateRecipe = (data) => {
-        console.log(data)
-        setLoading(true)
-        axios.put(`https://upskilling-egypt.com:443/api/v1/Recipe/${recipeId}`, { ...data, recipeImage: data.recipeImage[0] }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
-                "content-type": "multipart/form-data"
-            }
-
-        }).then((response) => {
-            console.log(response)
-            getRecipesList()
-            handleClose()
-            setLoading(false)
-        }).catch((error) => {
-            console.log(error);
-            setLoading(false)
-        })
-    }
 
     const searchByName = (e) => {
         getRecipesList(1, e.target.value)
         setSearchString(e.target.value)
+
     }
 
     const searchByTag = (e) => {
@@ -196,6 +157,7 @@ export default function RecipesList() {
         setSearchTag(e.target.value)
 
     }
+
     const searchByCategory = (e) => {
         console.log(e.target.value)
         getRecipesList(1, null, searchTag, e.target.value)
@@ -204,201 +166,41 @@ export default function RecipesList() {
     }
 
     const handlPageChange = (data) => {
+        console.log(data.selected);
         let currentPage = data.selected + 1
-        getRecipesList(currentPage, null, null)
+        getRecipesList(currentPage, searchString, searchByTag, searchByCategory) // 3ashan ama ados 3ala ay page yfdal 3amel search 
     }
 
 
-    useEffect(() => {
-        getRecipesList(1)
-        getCategoriesList()
-        getAllTags()
-    }, [])
+
 
 
 
     return (
         <section>
 
-            <Modal show={modalState == 'modal-del'} onHide={handleClose}>
+            <Modal show={modalState == 'modal-view'} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Delete Recipe</Modal.Title>
+                    <Modal.Title>Recipe details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className='text-center'>
-                        <img src={NoDataImg} alt="no-data" />
-                        <h4>Delete this item?</h4>
-                        <p className='text-muted'>are you sure you want to delete this item ? if you are sure just click on delete it</p>
-                        <button onClick={deleteRecipe}
-                            className='btn btn-outline-danger px-4 ms-auto d-block '>
-                            {loading ? <i class="fa-solid fa-spin fa-spinner"></i> : 'Delete'}
+                        {recipeDetails?.imagePath ?
+                            <img src={'https://upskilling-egypt.com:443/' + recipeDetails?.imagePath} className='w-50' alt="no-data" />
+                            : <img src={NoDataImg} alt="no-data" />}
+
+                        <h4 className='text-muted'>Name: {recipeDetails?.name} </h4>
+                        <p className='text-muted'>Description: {recipeDetails?.description} </p>
+
+                        <button
+                            className='btn btn-success'
+                            onClick={addToFavorite}>
+                            {loading ? <i className='fa-solid fa-spin fa-spinner px-4'></i>
+                                : <span className='fw-bold'>Add To Favorites</span>}
                         </button>
                     </div>
                 </Modal.Body>
             </Modal>
-
-
-            <Modal show={modalState == 'modal-add'} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title><h3>Add New Recipe</h3></Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-
-                    <form className='from-group' onSubmit={handleSubmit(submitFrom)} >
-                        <input type="text"
-                            className='form-control'
-                            placeholder='Recipe Name' {...register('name', {
-                                required: true
-                            })} />
-                        {errors.name && errors.name.type == 'required'
-                            && <span className='text-danger'>field required</span>}
-
-                        <input type="text"
-                            className='form-control mt-2'
-                            placeholder='Price' {...register('price', {
-                                required: true
-                            })} />
-                        {errors.price && errors.price.type == 'required'
-                            && <span className='text-danger'>field required</span>}
-
-                        <select name="" id="" className='form-select mt-2' {...register('tagId', {
-                            required: true,
-                            pattern: /^[0-9]{1,4}$/
-                        })} >
-                            <option selected disabled>tag</option>
-                            {tagList?.map((tag) => {
-                                return <option value={tag.id}> {tag.name} </option>
-                            })}
-                        </select>
-                        {errors.tagId && errors.tagId.type == 'required'
-                            && <span className='text-danger'>field required</span>}
-                        {errors.tagId && errors.tagId.type == 'pattern'
-                            && <span className='text-danger'>enter an id</span>}
-
-
-                        <select name="" id="" className='form-select mt-2' {...register('categoriesIds', {
-                            required: true,
-                            pattern: /^[0-9]{1,4}$/
-                        })}>
-                            <option selected disabled>category</option>
-                            {categoryList?.map((category) => {
-                                return <option value={category.id}> {category.name}   </option>
-                            })}
-
-                        </select>
-                        {errors.categoriesIds && errors.categoriesIds.type == 'required'
-                            && <span className='text-danger'>field required</span>}
-                        {errors.categoriesIds && errors.categoriesIds.type == 'pattern'
-                            && <span className='text-danger'>enter an id</span>}
-
-                        <input type="file" className='form-control mt-2' {...register('recipeImage')} />
-
-
-                        <textarea name=""
-                            id=""
-                            placeholder='Description'
-                            cols="60" rows="5"
-                            className='d-block mt-3 form-control' {...register('description', {
-                                required: true
-                            })} >
-                        </textarea>
-                        {errors.description && errors.description.type == 'required'
-                            && <span className='text-danger'>field required</span>}
-
-
-                        <button className='btn btn-success mt-4 w-100 fw-bold'>
-                            {loading ? <i class="fa-solid fa-spin fa-spinner"></i> : 'Add Recipe'}
-                        </button>
-
-                    </form>
-
-                </Modal.Body>
-            </Modal>
-
-            <Modal show={modalState == 'modal-update'} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title><h3>Update Recipe</h3></Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-
-                    <form className='from-group' onSubmit={handleSubmit(updateRecipe)} >
-                        <label className='fw-bold ms-1' htmlFor="name">name:</label>
-                        <input type="text"
-                            className='form-control'
-                            id='name'
-                            {...register('name', {
-                                required: true
-                            })} />
-                        {errors.name
-                            && <span className='text-danger d-block'>field required</span>}
-
-                        <label className='fw-bold ms-1 mt-2' htmlFor="price">price:</label>
-                        <input type="text"
-                            id='price'
-                            className='form-control'
-                            {...register('price', {
-                                required: true
-                            })} />
-                        {errors.price
-                            && <span className='text-danger d-block'>field required</span>}
-
-                        <label className='fw-bold ms-1 mt-2' htmlFor="tagId">tag:</label>
-                        <select id="tagId" className='form-select' {...register('tagId', {
-                            required: true,
-                            pattern: /^[0-9]{1,4}$/
-                        })} >
-                            <option selected disabled>choose tag</option>
-                            {tagList?.map((tag) => {
-                                return <option value={tag.id}> {tag.name} {tag.id} </option>
-                            })}
-                        </select>
-                        {errors.tagId && errors.tagId.type == 'required'
-                            && <span className='text-danger d-block'>field required</span>}
-                        {errors.tagId && errors.tagId.type == 'pattern'
-                            && <span className='text-danger d-block'>enter an id</span>}
-
-                        <label className='fw-bold ms-1 mt-2' htmlFor="categoriesIds">category:</label>
-                        <select id="categoriesIds" className='form-select' {...register('categoriesIds', {
-                            required: true,
-                            // pattern: /^[0-9]{1,4}$/,
-                        })}>
-                            <option selected disabled>choose category</option>
-                            {categoryList?.map((category) => {
-                                return <option value={category.id}> {category.name} {category.id} </option>
-                            })}
-                        </select>
-                        {errors.categoriesIds && <span className='text-danger d-block'>field required</span>}
-                        {/* {errors.categoriesIds && errors.categoriesIds.type == 'pattern'
-                            && <span className='text-danger d-block'>enter an id</span>} */}
-
-                        <label className='fw-bold ms-1 mt-2' htmlFor="recipeImage">recipeImage:</label>
-                        <input type="file" className='form-control' {...register('recipeImage')} />
-
-
-                        <img src={`https://upskilling-egypt.com:443/` + recipeObj?.imagePath}
-                            className='recipe-img d-block m-auto' alt="no-img" />
-
-
-                        <label className='fw-bold ms-1  mt-2' htmlFor="description">description:</label>
-                        <textarea name=""
-                            id="description"
-                            cols="60" rows="5"
-                            className='d-block form-control' {...register('description', {
-                                required: true
-                            })} >
-                        </textarea>
-                        {errors.description && <span className='text-danger d-block'>field required</span>}
-
-
-                        <button className='btn btn-success mt-4 w-100 fw-bold'>
-                            {loading ? <i class="fa-solid fa-spin fa-spinner"></i> : 'Update Recipe'}
-                        </button>
-
-                    </form>
-
-                </Modal.Body>
-            </Modal>
-
 
             <Header>
                 <div className='header-container rounded-4 text-white' style={{ marginTop: '70px' }}>
@@ -419,18 +221,8 @@ export default function RecipesList() {
                 </div>
             </Header>
 
-            <div className='row justify-content-between my-3'>
-                <div className='col-sm-8'>
-                    <h3>Recipe Table Details</h3>
-                    <span>You can check all details and search all recipes</span>
-                </div>
-                <div className='col-sm-4 text-end'>
-                    <button onClick={() => { ShowAddRecipeModal() }} className='btn btn-success px-4'>Add New Item</button>
-                </div>
-            </div>
 
-
-            <div className="row">
+            <div className="row mt-3">
                 <div className="col-sm-4">
                     <input onChange={searchByName} type="text" className='form-control mb-2' placeholder='search by name' />
                 </div>
@@ -452,11 +244,11 @@ export default function RecipesList() {
 
 
 
-            {recipeList?.length == 0 ? <NoData /> : <> <div className='table-responsive'> <table class="table table-striped align-middle text-center ">
+            {recipeList?.length == 0 ? <NoData /> : <> <div className='table-responsive'> <table class="table table-striped align-middle ">
                 <thead>
                     <tr className=''>
-                        <th className='t-h py-3 rounded-start-4' scope="col">#</th>
-                        <th className='t-h py-3' scope="col">Name</th>
+
+                        <th className='t-h py-3 rounded-start-4' scope="col">Name</th>
                         <th className='t-h py-3' scope="col">Image</th>
                         <th className='t-h py-3' scope="col">Price</th>
                         <th className='t-h py-3' scope="col">Description</th>
@@ -468,7 +260,7 @@ export default function RecipesList() {
                 <tbody>
                     {recipeList ? <>  {recipeList?.map((recipe, idx) => {
                         return <tr>
-                            <th scope="row"> {idx + 1} </th>
+
                             <td >{recipe.name}</td>
                             {recipe.imagePath ? <td>
                                 <img src={'https://upskilling-egypt.com:443/' + recipe.imagePath} className='recipe-img' alt="" /> </td>
@@ -479,12 +271,10 @@ export default function RecipesList() {
                             <td>{recipe.category[0]?.name} </td>
                             <td>{recipe.tag.name} </td>
                             <td>
-                                <i title='delete' onClick={() => { ShowDeleteRecipeModal(recipe.id) }}
-                                    className='fa fa-trash text-danger'
-                                    style={{ cursor: 'pointer' }} >
-                                </i>
-                                <i title='edit' onClick={() => { ShowUpdateRecipeModal(recipe) }} className='fa fa-edit ms-3 text-warning'
-                                    style={{ cursor: 'pointer' }} >
+
+                                <i title='edit' className='fa fa-eye ms-3 text-success'
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => { ShowViewRecipeModal(recipe.id) }}>
                                 </i>
                             </td>
                         </tr>
@@ -497,7 +287,7 @@ export default function RecipesList() {
                             width={60}
                             color="#fff"
                             wrapperStyle={{}}
-                            wrapperClass=""
+                            wrapperClass="d-flex justify-content-center"
                             visible={true}
                             ariaLabel='oval-loading'
                             secondaryColor="#4fa94d"
@@ -510,7 +300,7 @@ export default function RecipesList() {
                 <ReactPaginate
                     breakLabel={'...'}
                     pageCount={totalNumOfPages}
-                    marginPagesDisplayed={1}
+                    marginPagesDisplayed={2}
                     pageRangeDisplayed={4}
                     onPageChange={handlPageChange}
                     containerClassName='pagination justify-content-end'

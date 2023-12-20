@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Mylogo from '../../../assets/imgs/navbar-avatar.jpg'
+import { AuthContext } from '../../../Context/AuthContext';
 
-export default function Navbar({ adminData }) {
-    console.log(adminData)
+export default function Navbar() {
+
+    const { userData } = useContext(AuthContext)
+    console.log(userData);
     return (
         <div className='nav-bar position-relative'>
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -18,7 +21,7 @@ export default function Navbar({ adminData }) {
                                 <img src={Mylogo} alt="" className='Mylogo' />
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">{adminData?.userName}</a>
+                                <a className="nav-link" href="#">{userData?.userName}</a>
                             </li>
 
                         </ul>

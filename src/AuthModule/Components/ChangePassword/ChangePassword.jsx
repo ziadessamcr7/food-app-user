@@ -1,12 +1,15 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import myImg from '../../../assets/imgs/4 3.png'
 import { useForm, useWatch } from 'react-hook-form'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { AuthContext } from '../../../Context/AuthContext'
 
 export default function ChangePassword({ handleClose }) {
 
     const [loading, setLoading] = useState(false)
+
+    const { baseUrl, requestHeaders } = useContext(AuthContext)
 
     const {
         register,
@@ -20,8 +23,8 @@ export default function ChangePassword({ handleClose }) {
 
     const formSubmit = (data) => {
         setLoading(true)
-        axios.put('https://upskilling-egypt.com:443/api/v1/Users/ChangePassword', data, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+        axios.put(`${baseUrl}/Users/ChangePassword`, data, {
+            headers: requestHeaders
         }).then((response) => {
             console.log(response)
             toast.success(response.data.message, {

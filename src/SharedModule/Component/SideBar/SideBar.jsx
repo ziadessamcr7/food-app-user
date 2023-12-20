@@ -4,6 +4,7 @@ import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
 import Modal from 'react-bootstrap/Modal';
 import ChangePassword from '../../../AuthModule/Components/ChangePassword/ChangePassword';
 import menuLogo from '../../../assets/imgs/3.jpg'
+import chefHat from '../../../assets/imgs/3.png'
 
 export default function SideBar() {
 
@@ -25,10 +26,10 @@ export default function SideBar() {
     const nav = useNavigate()
 
     function logout() {
-        if (localStorage.getItem('adminToken') !== null) {
-            localStorage.removeItem('adminToken')
+        if (localStorage.getItem('userToken') !== null) {
+            localStorage.removeItem('userToken')
 
-            nav('/food-app-admin')
+            nav('/food-app-user')
         }
     }
 
@@ -37,7 +38,7 @@ export default function SideBar() {
         <div className='side-bar'>
             <Sidebar collapsed={isCollapsed}
                 backgroundColor='rgba(31, 38, 62, 1)'
-                className='text-white vh-100'>
+                className='text-white vh-100 pt-5 mt-3 '>
                 <Menu className='' >
 
                     <Modal show={show} onHide={handleClose}>
@@ -45,18 +46,16 @@ export default function SideBar() {
                     </Modal>
 
                     <MenuItem onClick={handleToggle}
-                        icon={<i className="fa fa-bars d-block"></i>}></MenuItem>
-                    <MenuItem title='dashboard' icon={<i className="fa fa-home" ></i>}
-                        component={<Link to="/dashboard" />}> Home
+                        className='text-start' icon={<img src={chefHat} className='chef-hat' alt="" />} >
                     </MenuItem>
-                    <MenuItem title='users list' icon={<i className="fa fa-users"></i>}
-                        component={<Link to="/dashboard/users" />}> Users
+                    <MenuItem title='home' icon={<i class="fa-solid fa-house-user"></i>}
+                        component={<Link to="/home" />}> Home
                     </MenuItem>
                     <MenuItem title='recipes' icon={<i class="fa-solid fa-kitchen-set"></i>}
-                        component={<Link to="/dashboard/recipes" />}>Recipes
+                        component={<Link to="/home/recipes" />}>Recipes
                     </MenuItem>
-                    <MenuItem title='categories' icon={<i class="fa-solid fa-table-list"></i>}
-                        component={<Link to="/dashboard/categories" />}>Categories
+                    <MenuItem title='favorites' icon={<i class="fa-solid fa-heart"></i>}
+                        component={<Link to="/home/favorites" />}>Favorites
                     </MenuItem>
                     <MenuItem title='change passsword' icon={<i class="fa-solid fa-unlock"></i>}
                         onClick={handleShow}>Change Password
@@ -69,17 +68,15 @@ export default function SideBar() {
         <div className='hidden-sb position-fixed top-0 z-3 d-none' style={{ display: 'flex', height: '100%', minHeight: '400px' }}>
             <Sidebar onBackdropClick={() => setToggled(false)} toggled={toggled} breakPoint="always">
                 <Menu >
-                    <MenuItem title='dashboard' icon={<i className="fa fa-home" ></i>}
-                        component={<Link to="/dashboard" />}> Home
+                    <MenuItem title='home' icon={<i class="fa-solid fa-house-user"></i>}
+                        component={<Link to="/home" />}> Home
                     </MenuItem>
-                    <MenuItem title='users list' icon={<i className="fa fa-users"></i>}
-                        component={<Link to="/dashboard/users" />}> Users
-                    </MenuItem>
+
                     <MenuItem title='recipes' icon={<i class="fa-solid fa-kitchen-set"></i>}
-                        component={<Link to="/dashboard/recipes" />}>Recipes
+                        component={<Link to="/home/recipes" />}>Recipes
                     </MenuItem>
-                    <MenuItem title='categories' icon={<i class="fa-solid fa-table-list"></i>}
-                        component={<Link to="/dashboard/categories" />}>Categories
+                    <MenuItem title='favorites' icon={<i class="fa-solid fa-heart"></i>}
+                        component={<Link to="/home/favorites" />}>Favorites
                     </MenuItem>
                     <MenuItem title='change passsword' icon={<i class="fa-solid fa-unlock"></i>}
                         onClick={handleShow}>Change Password
