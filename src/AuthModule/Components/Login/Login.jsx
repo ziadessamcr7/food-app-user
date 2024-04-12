@@ -91,6 +91,7 @@ export default function Login({ }) {
                                     name="email"
                                     id="email"
                                     placeholder='Enter your e-mail'
+                                    value="ziad.elsharkawy27@gmail.com"
                                     className='form-control mx-auto'
                                     {...register('email', {
                                         required: true,
@@ -110,6 +111,7 @@ export default function Login({ }) {
                                     name="password"
                                     id="password"
                                     placeholder='Password'
+                                    value="Zizo123!"
                                     className='form-control mx-auto'
                                     {...register('password', {
                                         required: true,

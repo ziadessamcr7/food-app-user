@@ -186,7 +186,7 @@ export default function RecipesList() {
                 <Modal.Body>
                     <div className='text-center'>
                         {recipeDetails?.imagePath ?
-                            <img src={'https://upskilling-egypt.com:443/' + recipeDetails?.imagePath} className='w-50' alt="no-data" />
+                            <img src={'https://upskilling-egypt.com:3006/' + recipeDetails?.imagePath} className='w-50' alt="no-data" />
                             : <img src={NoDataImg} alt="no-data" />}
 
                         <h4 className='text-muted'>Name: {recipeDetails?.name} </h4>
@@ -263,7 +263,7 @@ export default function RecipesList() {
 
                             <td >{recipe.name}</td>
                             {recipe.imagePath ? <td>
-                                <img src={'https://upskilling-egypt.com:443/' + recipe.imagePath} className='recipe-img' alt="" /> </td>
+                                <img src={'https://upskilling-egypt.com:3006/' + recipe.imagePath} className='recipe-img' alt="" /> </td>
                                 : <td> <img src={noImg} className='recipe-img' alt="" /> </td>}
 
                             <td>{recipe.price} L.E </td>

@@ -122,7 +122,7 @@ export default function Favorites() {
                 </div> : <>    {favList ? <>  {favList?.map((item) => {
                     return <div className="col-md-3">
                         <div className='card shadow z-0 bg-success-subtle rounded-3 p-3 position-relative'  >
-                            <img src={'https://upskilling-egypt.com:443/' + item.recipe.imagePath}
+                            <img src={'https://upskilling-egypt.com:3006/' + item.recipe.imagePath}
                                 alt="recipe-img"
                                 className='w-100'
                                 style={{ height: '200px' }} />
