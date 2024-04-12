@@ -13,7 +13,7 @@ export default function AuthContextProvider({ children }) {
     let requestHeaders =
         { Authorization: `Bearer ${localStorage.getItem('userToken')}` }
 
-    let baseUrl = "https://upskilling-egypt.com:443/api/v1"
+    let baseUrl = "https://upskilling-egypt.com:3006/api/v1"
 
 
     useEffect(() => {
@@ -29,7 +29,6 @@ export default function AuthContextProvider({ children }) {
         console.log(decodedToken);
         setUserData(decodedToken)
     }
-
 
 
     return (

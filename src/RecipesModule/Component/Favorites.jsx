@@ -147,7 +147,7 @@ export default function Favorites() {
                     color="#4fa94d"
                     ariaLabel="hearts-loading"
                     wrapperStyle={{}}
-                    wrapperClass="d-flex justify-content-center a align-items-center pt-5 mt-5"
+                    wrapperClass=""
                     visible={true}
                 />} </>}
 
