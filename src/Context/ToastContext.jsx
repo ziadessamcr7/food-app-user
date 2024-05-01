@@ -13,7 +13,7 @@ export default function ToastContextProvider({ children }) {
 
     return (
 
-        <ToastContext.Provider value={getToastValues}>
+        <ToastContext.Provider value={{ getToastValues }}>
             {children}
         </ToastContext.Provider>
     )

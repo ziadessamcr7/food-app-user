@@ -49,6 +49,9 @@ export default function Favorites() {
 
         }).catch((error) => {
             console.log(error)
+            toast.error('errrrrrrror', {
+                autoClose: 2000
+            })
             setLoading(false)
         })
     }

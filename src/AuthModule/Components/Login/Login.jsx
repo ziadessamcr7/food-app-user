@@ -40,14 +40,11 @@ export default function Login({ }) {
     }
 
     const onSubmit = (data) => {
-        console.log(data)
-
         setloading(true)
 
         axios.post(`${baseUrl}/Users/Login`, data)
-            .then(function (response) {
-                { () => getToastValues('success', 'login success') }
-
+            .then((response) => {
+                getToastValues('success', 'login success!')
                 nav('/home')
                 console.log(response);
 
@@ -57,8 +54,8 @@ export default function Login({ }) {
                 saveUserData()  // 3ashan a5aly el esm yzhar fl navbar w el header
             })
             .catch(function (error) {
-                console.log('errorrr', error.response.data.message);
-                toast.error(error.response.data.message)
+                getToastValues('error', error?.response?.data?.message)
+                toast.error()
                 setloading(false)
             })
     }
@@ -91,7 +88,7 @@ export default function Login({ }) {
                                     name="email"
                                     id="email"
                                     placeholder='Enter your e-mail'
-                                    value="ziad.elsharkawy27@gmail.com"
+                                    defaultValue={'ziadessamcr7@gmail.com'}
                                     className='form-control mx-auto'
                                     {...register('email', {
                                         required: true,
@@ -111,7 +108,7 @@ export default function Login({ }) {
                                     name="password"
                                     id="password"
                                     placeholder='Password'
-                                    value="Zizo123!"
+                                    defaultValue={"Zizo1234!"}
                                     className='form-control mx-auto'
                                     {...register('password', {
                                         required: true,
