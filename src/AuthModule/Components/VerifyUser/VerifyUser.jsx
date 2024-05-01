@@ -29,20 +29,17 @@ export default function VerifyUser() {
     } = useForm()
 
     const SubmitVerify = (data) => {
-        console.log(data)
 
         setloading(true)
 
         axios.put(`${baseUrl}/Users/verify`, data)
             .then(function (response) {
                 toast.success(response.data.message)
-                console.log(response);
 
                 nav('/food-app-user')
 
             })
             .catch(function (error) {
-                console.log(error.response.data.message);
                 toast(error.response.data.message)
             })
 

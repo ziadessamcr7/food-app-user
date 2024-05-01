@@ -46,7 +46,6 @@ export default function Login({ }) {
             .then((response) => {
                 getToastValues('success', 'login success!')
                 nav('/home')
-                console.log(response);
 
                 localStorage.setItem('userToken', response.data.token)
                 setloading(false)

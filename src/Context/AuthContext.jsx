@@ -26,7 +26,6 @@ export default function AuthContextProvider({ children }) {
     const saveUserData = () => {
         const encodedToken = localStorage.getItem('userToken')
         const decodedToken = jwtDecode(encodedToken)
-        console.log(decodedToken);
         setUserData(decodedToken)
     }
 

@@ -5,7 +5,6 @@ import { AuthContext } from '../../../Context/AuthContext';
 export default function Navbar() {
 
     const { userData } = useContext(AuthContext)
-    console.log(userData);
     return (
         <div className='nav-bar position-relative'>
             <nav className="navbar navbar-expand-lg bg-body-tertiary">

@@ -25,20 +25,17 @@ export default function ForgetPassword() {
     } = useForm()
 
     const onSubmit = (data) => {
-        console.log(data)
 
         setloading(true)
 
         axios.post(`${baseUrl}/Users/Reset/Request`, data)
             .then(function (response) {
                 toast.success(response.data.message)
-                console.log(response);
 
                 nav('/reset-pass')
 
             })
             .catch(function (error) {
-                console.log(error.response.data.message);
                 toast(error.response.data.message)
             })
 

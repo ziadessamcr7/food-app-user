@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import { Hearts } from 'react-loader-spinner'
 import NoData from '../../SharedModule/Component/NoData/NoData'
 import { Link } from 'react-router-dom'
+import { ToastContext } from '../../Context/ToastContext'
 
 
 export default function Favorites() {
@@ -16,6 +17,7 @@ export default function Favorites() {
     const [loading, setLoading] = useState(false)  //loader
     const [favList, setFavList] = useState(null)
     const { requestHeaders, baseUrl } = useContext(AuthContext)
+    const { getToastValues } = useContext(ToastContext)
 
     const [itemId, setItemId] = useState();
     const [modalState, setModalState] = useState('close');
@@ -27,7 +29,6 @@ export default function Favorites() {
         axios.get(`${baseUrl}/userRecipe/`, {
             headers: requestHeaders
         }).then((response) => {
-            console.log(response.data.data);
             setFavList(response.data.data)
         }).catch((error) => {
             console.log(error)
@@ -39,13 +40,11 @@ export default function Favorites() {
         axios.delete(`${baseUrl}/userRecipe/${itemId}`, {
             headers: requestHeaders
         }).then((response) => {
-            console.log(response);
             setLoading(false)
             getAllFavs()
             handleClose()
-            toast.success('item removed successfully', {
-                autoClose: 2000
-            })
+            getToastValues('success', 'item removed successfully')
+
 
         }).catch((error) => {
             console.log(error)
@@ -63,7 +62,6 @@ export default function Favorites() {
 
 
     }
-
 
 
     useEffect(() => {
@@ -144,15 +142,17 @@ export default function Favorites() {
 
                         </div>
                     </div>
-                })}</> : <Hearts
-                    height="80"
-                    width="80"
-                    color="#4fa94d"
-                    ariaLabel="hearts-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                    visible={true}
-                />} </>}
+                })}</> : <div className='d-flex justify-content-center align-items-center'>
+                    <Hearts
+                        height="80"
+                        width="80"
+                        color="#4fa94d"
+                        ariaLabel="hearts-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                    />
+                </div>} </>}
 
 
 

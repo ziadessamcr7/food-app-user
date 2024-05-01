@@ -29,12 +29,10 @@ export default function ResetPassword() {
 
 
     const onSubmit = (data) => {
-        console.log(data)
         setLoading(true)
         axios.post(`${baseUrl}/Users/Reset`, data)
             .then(function (response) {
                 toast.success(response.data.message)
-                console.log(response);
                 setTimeout(() => {
                     nav('/food-app-user')
                 }, 4000);
@@ -44,7 +42,6 @@ export default function ResetPassword() {
 
             })
             .catch(function (error) {
-                console.log(error.response.data.message);
                 toast(error.response.data.message)
                 setLoading(false)
             })

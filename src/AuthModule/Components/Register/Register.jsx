@@ -29,7 +29,6 @@ export default function Register() {
     const password = watch('password')
 
     const Registerform = (data) => {
-        console.log(data)
 
         setloading(true)
 
@@ -43,7 +42,6 @@ export default function Register() {
                 nav('/verify-user')
             })
             .catch(function (error) {
-                console.log('errorrr', error.response.data.message);
                 toast.error(error.response.data.message)
                 setloading(false)
             })

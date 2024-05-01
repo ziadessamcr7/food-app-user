@@ -26,7 +26,6 @@ export default function ChangePassword({ handleClose }) {
         axios.put(`${baseUrl}/Users/ChangePassword`, data, {
             headers: requestHeaders
         }).then((response) => {
-            console.log(response)
             toast.success(response.data.message, {
                 autoClose: 2000
             })

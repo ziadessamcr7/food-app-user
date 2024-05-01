@@ -66,7 +66,6 @@ export default function RecipesList() {
         axios.get(`${baseUrl}/Recipe/${id}`, {
             headers: requestHeaders
         }).then((response) => {
-            console.log(response.data)
             setRecipeDetails(response.data)
         }).catch((error) => {
             console.log(error)
@@ -82,12 +81,9 @@ export default function RecipesList() {
 
         })
             .then((response) => {
-                console.log(response.data.recipe);
                 setLoading(false)
                 handleClose()
-                toast.success('Added successfully to your favorites', {
-                    autoClose: 2000
-                })
+                getToastValues('success', 'Added successfully to your favorites')
             }).catch((error) => {
                 console.log(error);
                 setLoading(false)
@@ -99,7 +95,6 @@ export default function RecipesList() {
         axios.get(`${baseUrl}/tag/`, {
             headers: requestHeaders
         }).then((response) => {
-            console.log(response.data)
             setTagList(response.data)
         }).catch((error) => {
             console.log(error)
@@ -133,7 +128,6 @@ export default function RecipesList() {
                 categoryId: catId
             }
         }).then((response) => {
-            console.log(response)
             setRecipeList(response.data.data)
             setTotalNumOfPages(response.data.totalNumberOfPages)
             // setPagesArray(Array(response.data.totalNumberOfPages).fill().map((_, i) => i + 1))
@@ -152,26 +146,21 @@ export default function RecipesList() {
     }
 
     const searchByTag = (e) => {
-        console.log(e.target.value)
         getRecipesList(1, null, e.target.value, searchCat)
         setSearchTag(e.target.value)
 
     }
 
     const searchByCategory = (e) => {
-        console.log(e.target.value)
         getRecipesList(1, null, searchTag, e.target.value)
         setSearchCat(e.target.value)
 
     }
 
     const handlPageChange = (data) => {
-        console.log(data.selected);
         let currentPage = data.selected + 1
         getRecipesList(currentPage, searchString, searchByTag, searchByCategory) // 3ashan ama ados 3ala ay page yfdal 3amel search 
     }
-
-
 
 
 
