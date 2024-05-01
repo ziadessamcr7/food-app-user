@@ -87,7 +87,7 @@ export default function Login({ }) {
                                     name="email"
                                     id="email"
                                     placeholder='Enter your e-mail'
-                                    defaultValue={'ziadessamcr7@gmail.com'}
+                                    defaultValue={'ziad.elsharkawy27@gmail.com'}
                                     className='form-control mx-auto'
                                     {...register('email', {
                                         required: true,
@@ -107,7 +107,7 @@ export default function Login({ }) {
                                     name="password"
                                     id="password"
                                     placeholder='Password'
-                                    defaultValue={"Zizo1234!"}
+                                    defaultValue={"Zizo123!"}
                                     className='form-control mx-auto'
                                     {...register('password', {
                                         required: true,

@@ -145,7 +145,7 @@ export default function Register() {
                                             id="password"
                                             {...register('password', {
                                                 required: "password is required",
-                                                pattern: /^[A-Za-z\d@$!%*#?&]{6,15}$/
+                                                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
                                             })} />
 
                                         <i className='fa fa-lock input-icon'></i>
@@ -155,7 +155,7 @@ export default function Register() {
                                     {errors.password &&
                                         <span className='text-danger'> {errors.password.message} </span>}
                                     {errors.password && errors.password.type == 'pattern' &&
-                                        <span className='text-danger'> enter a vlaid password </span>}
+                                        <span className='text-danger'> Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character </span>}
                                 </div>
 
                                 <div className="col-md-6">
